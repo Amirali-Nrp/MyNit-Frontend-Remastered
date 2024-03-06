@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 import { signUpObject, TsignUpObject } from "@/validation/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,7 +28,10 @@ export default function SignUp() {
     resolver: zodResolver(signUpObject),
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSignUp = async (data: TsignUpObject) => {
+    setIsLoading(true);
     console.log("login data", data);
     const result = await signup(data.id, data.name, data.password);
 
@@ -40,6 +43,7 @@ export default function SignUp() {
       showToast("خطا در ثبت نام", "error", 3000);
     }
 
+    setIsLoading(false);
     reset();
   };
 
@@ -128,8 +132,12 @@ export default function SignUp() {
       >
         حساب کاربری دارید؟ <Link href="/Login">وارد شوید</Link>
       </Typography>
-      <button className="button-48">
-        {isSubmitting ? (
+      <button
+        className="button-48"
+        disabled={isLoading || isSubmitting}
+        type="submit"
+      >
+        {isSubmitting || isLoading ? (
           <div className="flex w-full items-center justify-center">
             <CircularProgress />
           </div>

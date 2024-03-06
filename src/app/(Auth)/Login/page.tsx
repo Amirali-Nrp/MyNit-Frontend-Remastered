@@ -13,6 +13,8 @@ import { useForm } from "react-hook-form";
 
 import "@/app/button.css";
 
+import { useState } from "react";
+
 import { loginAction } from "@/core/actions";
 import showToast from "@/utils/showToast";
 
@@ -26,7 +28,10 @@ const Login = () => {
     resolver: zodResolver(loginObject),
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleLogin = async (data: TloginObject) => {
+    setIsLoading(true);
     console.log("login data", data);
     const result = await loginAction(data);
 
@@ -38,6 +43,7 @@ const Login = () => {
       showToast("خطا در ورود", "error", 3000);
     }
 
+    setIsLoading(false);
     reset();
   };
 
@@ -109,8 +115,8 @@ const Login = () => {
       >
         حساب کاربری ندارید؟ <Link href="/SignUp">ثبت نام کنید</Link>
       </Typography>
-      <button className="button-48">
-        {isSubmitting ? (
+      <button className="button-48" disabled={isLoading || isSubmitting} type="submit">
+        {isSubmitting || isLoading ? (
           <div className="flex w-full items-center justify-center">
             <CircularProgress />
           </div>

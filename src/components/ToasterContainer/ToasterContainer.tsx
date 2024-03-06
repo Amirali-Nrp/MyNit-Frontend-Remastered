@@ -5,7 +5,6 @@ import { Toaster } from "react-hot-toast";
 
 function ToasterContainer() {
   return (
-    // <Box sx={{ displayPrint: "none" }}>
     <Toaster
       containerStyle={{
         textAlign: "right",
@@ -16,9 +15,8 @@ function ToasterContainer() {
           color: "black",
         },
       }}
-      position="bottom-left"
+      position="top-center"
     />
-    // </Box>
   );
 }
 
