@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+
 import "./globals.css";
+
+import ReactQueryProvider from "@/providers/react-query-provider";
+import CustomThemeProvider from "@/providers/theme-provider";
+import { theme } from "@/themes/theme";
+
+import ToasterContainer from "@/components/ToasterContainer/ToasterContainer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,8 +22,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" dir="rtl">
+      <body
+        className={"min-h-screen bg-[url('/assets/background.svg')] bg-fixed"}
+      >
+        <ReactQueryProvider>
+          <CustomThemeProvider theme={theme}>
+            <ToasterContainer />
+            {children}
+          </CustomThemeProvider>
+        </ReactQueryProvider>
+      </body>
     </html>
   );
 }

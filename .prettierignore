@@ -1,0 +1,10 @@
+# next.js build files
+.next
+dist
+build
+
+# node modules
+node_modules
+
+# public folder on next.js
+public
