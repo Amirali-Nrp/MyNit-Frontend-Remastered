@@ -13,6 +13,9 @@ import { useForm } from "react-hook-form";
 
 import "@/app/button.css";
 
+import { loginAction } from "@/core/actions";
+import showToast from "@/utils/showToast";
+
 const Login = () => {
   const {
     register,
@@ -23,9 +26,18 @@ const Login = () => {
     resolver: zodResolver(loginObject),
   });
 
-  const handleLogin = (data: TloginObject) => {
+  const handleLogin = async (data: TloginObject) => {
     console.log("login data", data);
-    // TODO: login request
+    const result = await loginAction(data);
+
+    if (result == "Success") {
+      console.log("login success");
+      showToast("ورود با موفقیت انجام شد", "success", 3000);
+    } else {
+      console.log("login failed");
+      showToast("خطا در ورود", "error", 3000);
+    }
+
     reset();
   };
 
@@ -46,13 +58,13 @@ const Login = () => {
         ورود به حساب کاربری
       </Typography>
       <TextField
-        {...register("studentNumber")}
+        {...register("id")}
         margin="normal"
         fullWidth
-        id="studentNumber"
+        id="id"
         label="شماره دانشجویی"
-        name="studentNumber"
-        autoComplete="studentNumber"
+        name="id"
+        autoComplete="id"
         autoFocus
         InputProps={{
           sx: { borderRadius: 50 },
@@ -61,8 +73,8 @@ const Login = () => {
         InputLabelProps={{
           sx: { fontFamily: "vazirmatn" },
         }}
-        error={!!errors.studentNumber}
-        helperText={errors.studentNumber?.message}
+        error={!!errors.id}
+        helperText={errors.id?.message}
       />
       <TextField
         {...register("password")}
