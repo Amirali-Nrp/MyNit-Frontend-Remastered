@@ -1,14 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import React from "react";
 
 import { Box, Container, Typography } from "@mui/material";
 
-import "@/app/button.css";
-
-export default function Home() {
-  const router = useRouter();
-
+export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <Container component="main" maxWidth="xs" sx={{ mt: 10 }}>
       <Box
@@ -30,21 +26,7 @@ export default function Home() {
         >
           سامانه دانشجویی دانشگاه نوشیروانی بابل
         </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            width: "100%",
-            gap: 2,
-          }}
-        >
-          <button className="button-48" onClick={() => router.push("/Login")}>
-            <span>ورود</span>
-          </button>
-          <button className="button-48" onClick={() => router.push("/SignUp")}>
-            <span>ثبت نام</span>
-          </button>
-        </Box>
+        {children}
       </Box>
     </Container>
   );
