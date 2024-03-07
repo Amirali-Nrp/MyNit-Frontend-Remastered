@@ -3,17 +3,17 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 import { authed_routes } from "./constants/routes";
+import { auth } from "./lib/auth";
 
 export async function middleware(request: NextRequest) {
-  const cookieStore = cookies();
-  const access_token = cookieStore.get("token");
+  const session = await auth();
 
   if (
     request.nextUrl.pathname.startsWith("/") &&
     request.nextUrl.pathname.endsWith("/")
   ) {
     const tokens = {
-      access_token: access_token,
+      access_token: session?.user.token,
     };
 
     if (tokens.access_token === undefined) {
@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          access_token: tokens.access_token.value,
+          access_token: tokens.access_token,
         }),
       });
 
@@ -43,7 +43,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL("/", request.url));
   } else if (authed_routes.includes(request.nextUrl.pathname)) {
     const tokens = {
-      access_token: access_token,
+      access_token: session?.user.token,
     };
 
     if (tokens.access_token === undefined) {
@@ -57,7 +57,7 @@ export async function middleware(request: NextRequest) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          access_token: tokens.access_token.value,
+          access_token: tokens.access_token,
         }),
       });
 
