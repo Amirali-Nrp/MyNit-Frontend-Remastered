@@ -5,11 +5,10 @@ import "./globals.css";
 
 import ReactQueryProvider from "@/providers/react-query-provider";
 import CustomThemeProvider from "@/providers/theme-provider";
-import { theme } from "@/themes/theme";
 
 import ToasterContainer from "@/components/ToasterContainer/ToasterContainer";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,7 +26,7 @@ export default function RootLayout({
         className={"min-h-screen bg-[url('/assets/background.svg')] bg-fixed"}
       >
         <ReactQueryProvider>
-          <CustomThemeProvider theme={theme}>
+          <CustomThemeProvider>
             <ToasterContainer />
             {children}
           </CustomThemeProvider>

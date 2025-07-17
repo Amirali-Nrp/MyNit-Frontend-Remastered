@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 
 import { authed_routes } from "./constants/routes";
 import { auth } from "./lib/auth";
+import { AuthorizeResponse } from "./types";
 
 export async function middleware(request: NextRequest) {
   const session = await auth();
@@ -31,7 +32,7 @@ export async function middleware(request: NextRequest) {
         }),
       });
 
-      const result = await resposne.json();
+      const result: AuthorizeResponse = await resposne.json();
       if (result.detail === "unauthorized") {
         return NextResponse.redirect(new URL("/", request.url));
       }
@@ -61,7 +62,7 @@ export async function middleware(request: NextRequest) {
         }),
       });
 
-      const result = await resposne.json();
+      const result: AuthorizeResponse = await resposne.json();
       // console.log("res", result);
       if (result.detail === "unauthorized") {
         return NextResponse.rewrite(new URL("/", request.url));

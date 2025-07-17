@@ -57,8 +57,8 @@ const Login = () => {
       <Typography
         sx={{
           textAlign: "center",
-          fontSize: "21px",
-          fontWeight: "550",
+          fontSize: "20px",
+          fontWeight: "500",
         }}
       >
         ورود به حساب کاربری
@@ -115,7 +115,11 @@ const Login = () => {
       >
         حساب کاربری ندارید؟ <Link href="/SignUp">ثبت نام کنید</Link>
       </Typography>
-      <button className="button-48" disabled={isLoading || isSubmitting} type="submit">
+      <button
+        className="button-48"
+        disabled={isLoading || isSubmitting}
+        type="submit"
+      >
         {isSubmitting || isLoading ? (
           <div className="flex w-full items-center justify-center">
             <CircularProgress />

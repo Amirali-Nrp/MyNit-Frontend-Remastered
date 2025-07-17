@@ -39,6 +39,9 @@ export const signUpObject = z
       .string()
       .min(8, { message: "رمز عبور باید حداقل ۸ کاراکتر باشد" }),
     confirmPassword: z.string(),
+    phone: z
+      .string()
+      .regex(/^09[0-9]{9}/, { message: "شماره وارد شده معتبر نمی باشد" }),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {
     if (confirmPassword !== password) {

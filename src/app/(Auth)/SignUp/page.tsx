@@ -48,17 +48,12 @@ export default function SignUp() {
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit(handleSignUp)}
-      noValidate
-      sx={{ mt: 1 }}
-    >
+    <Box component="form" onSubmit={handleSubmit(handleSignUp)} noValidate>
       <Typography
         sx={{
           textAlign: "center",
-          fontSize: "21px",
-          fontWeight: "550",
+          fontSize: "20px",
+          fontWeight: "500",
         }}
       >
         ثبت نام
@@ -117,13 +112,18 @@ export default function SignUp() {
         error={!!errors.confirmPassword}
         helperText={errors.confirmPassword?.message}
       />
-      {/* <FormControlLabel
-    control={<Checkbox value="remember" color="primary" />}
-    label={
-      <Typography fontFamily="Vazirmatn">مرا به خاطر بسپار</Typography>
-    }
-    sx={{ marginLeft: 1, direction: "rtl" }}
-  /> */}
+      <TextField
+        {...register("phone")}
+        margin="normal"
+        fullWidth
+        name="phone"
+        label="شماره تلفن همراه"
+        type="phone"
+        id="phone"
+        InputProps={{ sx: { borderRadius: 50 } }}
+        error={!!errors.phone}
+        helperText={errors.phone?.message}
+      />
       <Typography
         sx={{
           fontSize: "16px",

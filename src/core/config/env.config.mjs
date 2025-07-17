@@ -11,7 +11,7 @@ export const parsedEnv = createEnv({
     AUTH_URL: z
       .string()
       .min(1)
-      .refine((url) => url.endsWith("/api/auth")),
+      .refine((url) => url.endsWith("/authorize")),
   },
   client: {},
   runtimeEnv: {

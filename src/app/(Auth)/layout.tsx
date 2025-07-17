@@ -6,7 +6,7 @@ import { Box, Container, Typography } from "@mui/material";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <Container component="main" maxWidth="xs" sx={{ mt: 10 }}>
+    <Container component="main" maxWidth="xs" sx={{ mt: 5 }}>
       <Box
         sx={{
           display: "flex",
@@ -16,12 +16,11 @@ export default function layout({ children }: { children: React.ReactNode }) {
       >
         <img src="/assets/logo.png" />
         <Typography
-          component="h1"
-          variant="h5"
+          variant="h6"
+          className="text-center"
           sx={{
-            margin: "20px",
-            fontSize: "21px",
-            fontWeight: "550",
+            margin: "12px",
+            fontWeight: "600",
           }}
         >
           سامانه دانشجویی دانشگاه نوشیروانی بابل
