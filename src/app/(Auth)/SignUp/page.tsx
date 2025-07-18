@@ -15,6 +15,8 @@ import { useForm } from "react-hook-form";
 
 import "@/app/button.css";
 
+import { useRouter } from "next/navigation";
+
 import { signup } from "@/core/services/api/auth/signup.api";
 import showToast from "@/utils/showToast";
 
@@ -30,16 +32,16 @@ export default function SignUp() {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const router = useRouter();
+
   const handleSignUp = async (data: TsignUpObject) => {
     setIsLoading(true);
-    console.log("login data", data);
     const result = await signup(data.id, data.name, data.password);
 
     if (result) {
-      console.log("login success", result);
       showToast("ثبت نام با موفقیت انجام شد", "success", 3000);
+      router.push("/");
     } else {
-      console.log("login failed");
       showToast("خطا در ثبت نام", "error", 3000);
     }
 
@@ -52,8 +54,8 @@ export default function SignUp() {
       <Typography
         sx={{
           textAlign: "center",
-          fontSize: "20px",
-          fontWeight: "500",
+          fontSize: "21px",
+          fontWeight: "550",
         }}
       >
         ثبت نام
@@ -62,14 +64,34 @@ export default function SignUp() {
         {...register("id")}
         margin="normal"
         fullWidth
+        required
         id="id"
         label="شماره دانشجویی"
         name="id"
         autoComplete="id"
         autoFocus
+        sx={{
+          "& label.Mui-focused": {
+            color: "white",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "white",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "white",
+            },
+          },
+        }}
         InputProps={{
-          sx: { borderRadius: 50 },
+          sx: { borderRadius: 50, color: "white" },
           inputMode: "numeric",
+        }}
+        InputLabelProps={{
+          sx: { fontFamily: "vazirmatn", color: "white" },
         }}
         error={!!errors.id}
         helperText={errors.id?.message}
@@ -78,12 +100,32 @@ export default function SignUp() {
         {...register("name")}
         margin="normal"
         fullWidth
+        required
         name="name"
         label="نام"
         type="text"
         id="name"
         autoComplete="name"
-        InputProps={{ sx: { borderRadius: 50 } }}
+        sx={{
+          "& label.Mui-focused": {
+            color: "white",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "white",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "white",
+            },
+          },
+        }}
+        InputProps={{ sx: { borderRadius: 50, color: "white" } }}
+        InputLabelProps={{
+          sx: { fontFamily: "vazirmatn", color: "white" },
+        }}
         error={!!errors.name}
         helperText={errors.name?.message}
       />
@@ -91,11 +133,31 @@ export default function SignUp() {
         {...register("password")}
         margin="normal"
         fullWidth
+        required
+        sx={{
+          "& label.Mui-focused": {
+            color: "white",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "white",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "white",
+            },
+          },
+        }}
         name="password"
         label="رمزعبور"
         type="password"
         id="password"
-        InputProps={{ sx: { borderRadius: 50 } }}
+        InputProps={{ sx: { borderRadius: 50, color: "white" } }}
+        InputLabelProps={{
+          sx: { fontFamily: "vazirmatn", color: "white" },
+        }}
         error={!!errors.password}
         helperText={errors.password?.message}
       />
@@ -104,26 +166,66 @@ export default function SignUp() {
         {...register("confirmPassword")}
         margin="normal"
         fullWidth
+        required
+        sx={{
+          "& label.Mui-focused": {
+            color: "white",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "white",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "white",
+            },
+          },
+        }}
         name="confirmPassword"
         label="تکرار رمزعبور"
         type="password"
         id="confirmPassword"
-        InputProps={{ sx: { borderRadius: 50 } }}
+        InputProps={{ sx: { borderRadius: 50, color: "white" } }}
+        InputLabelProps={{
+          sx: { fontFamily: "vazirmatn", color: "white" },
+        }}
         error={!!errors.confirmPassword}
         helperText={errors.confirmPassword?.message}
       />
-      <TextField
+      {/* <TextField
         {...register("phone")}
         margin="normal"
         fullWidth
+        required
+        sx={{
+          "& label.Mui-focused": {
+            color: "white",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "white",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "white",
+            },
+          },
+        }}
         name="phone"
         label="شماره تلفن همراه"
         type="phone"
         id="phone"
-        InputProps={{ sx: { borderRadius: 50 } }}
+        InputProps={{ sx: { borderRadius: 50, color: "white" } }}
+        InputLabelProps={{
+          sx: { fontFamily: "vazirmatn", color: "white" },
+        }}
         error={!!errors.phone}
         helperText={errors.phone?.message}
-      />
+      /> */}
       <Typography
         sx={{
           fontSize: "16px",

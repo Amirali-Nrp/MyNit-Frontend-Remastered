@@ -8,17 +8,17 @@ export const parsedEnv = createEnv({
       .default("development"),
     API_URL: z.string().min(1),
     AUTH_SECRET: z.string().length(44),
-    AUTH_URL: z
-      .string()
-      .min(1)
-      .refine((url) => url.endsWith("/authorize")),
+    // AUTH_URL: z
+    //   .string()
+    //   .min(1)
+    //   .refine((url) => url.endsWith("/lib/auth")),
   },
   client: {},
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     API_URL: process.env.API_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
-    AUTH_URL: process.env.AUTH_URL,
+    // AUTH_URL: process.env.AUTH_URL,
   },
   emptyStringAsUndefined: true,
 });

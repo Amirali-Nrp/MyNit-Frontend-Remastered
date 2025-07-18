@@ -10,42 +10,47 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <Container component="main" maxWidth="xs" sx={{ mt: 10 }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <img src="/assets/logo.png" />
-        <Typography
-          component="h1"
-          variant="h5"
-          sx={{
-            margin: "20px",
-            fontSize: "21px",
-            fontWeight: "550",
-          }}
-        >
-          سامانه دانشجویی دانشگاه نوشیروانی بابل
-        </Typography>
+    <div className="absolute h-full w-full bg-[url('/assets/nit-map.png')] bg-cover text-white">
+      <Container component="main" maxWidth="xs" sx={{ mt: 10 }}>
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
-            width: "100%",
-            gap: 2,
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <button className="button-48" onClick={() => router.push("/Login")}>
-            <span>ورود</span>
-          </button>
-          <button className="button-48" onClick={() => router.push("/SignUp")}>
-            <span>ثبت نام</span>
-          </button>
+          <img src="/assets/logo.png" />
+          <Typography
+            component="h1"
+            variant="h5"
+            sx={{
+              margin: "20px",
+              fontSize: "21px",
+              fontWeight: "550",
+            }}
+          >
+            سامانه هوشمند انتخاب واحد
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              width: "100%",
+              gap: 2,
+            }}
+          >
+            <button className="button-48" onClick={() => router.push("/Login")}>
+              <span>ورود</span>
+            </button>
+            <button
+              className="button-48"
+              onClick={() => router.push("/SignUp")}
+            >
+              <span>ثبت نام</span>
+            </button>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </div>
   );
 }

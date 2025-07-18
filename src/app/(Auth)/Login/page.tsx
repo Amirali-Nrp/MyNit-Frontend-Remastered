@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import "@/app/button.css";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { loginAction } from "@/core/actions";
 import showToast from "@/utils/showToast";
@@ -30,17 +31,17 @@ const Login = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const router = useRouter();
+
   const handleLogin = async (data: TloginObject) => {
     setIsLoading(true);
-    console.log("login data", data);
     const result = await loginAction(data);
 
     if (result == "Success") {
-      console.log("login success");
       showToast("ورود با موفقیت انجام شد", "success", 3000);
+      router.push("/dashboard");
     } else {
-      console.log("login failed");
-      showToast("خطا در ورود", "error", 3000);
+      showToast("شماره دانشجویی یا رمز عبور نادرست است", "error", 3000);
     }
 
     setIsLoading(false);
@@ -57,8 +58,8 @@ const Login = () => {
       <Typography
         sx={{
           textAlign: "center",
-          fontSize: "20px",
-          fontWeight: "500",
+          fontSize: "21px",
+          fontWeight: "550",
         }}
       >
         ورود به حساب کاربری
@@ -67,17 +68,34 @@ const Login = () => {
         {...register("id")}
         margin="normal"
         fullWidth
+        required
         id="id"
         label="شماره دانشجویی"
         name="id"
         autoComplete="id"
         autoFocus
+        sx={{
+          "& label.Mui-focused": {
+            color: "white",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "white",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "white",
+            },
+          },
+        }}
         InputProps={{
-          sx: { borderRadius: 50 },
+          sx: { borderRadius: 50, color: "white" },
           inputMode: "numeric",
         }}
         InputLabelProps={{
-          sx: { fontFamily: "vazirmatn" },
+          sx: { fontFamily: "vazirmatn", color: "white" },
         }}
         error={!!errors.id}
         helperText={errors.id?.message}
@@ -86,14 +104,31 @@ const Login = () => {
         {...register("password")}
         margin="normal"
         fullWidth
+        required
         name="password"
         label="رمزعبور"
         type="password"
         id="password"
         autoComplete="current-password"
-        InputProps={{ sx: { borderRadius: 50 } }}
+        sx={{
+          "& label.Mui-focused": {
+            color: "white",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "white",
+            },
+            "&:hover fieldset": {
+              borderColor: "white",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "white",
+            },
+          },
+        }}
+        InputProps={{ sx: { borderRadius: 50, color: "white" } }}
         InputLabelProps={{
-          sx: { fontFamily: "vazirmatn" },
+          sx: { fontFamily: "vazirmatn", color: "white" },
         }}
         error={!!errors.password}
         helperText={errors.password?.message}
