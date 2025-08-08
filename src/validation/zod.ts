@@ -63,3 +63,81 @@ export const signUpResponseSchema = z
   .strict();
 
 export type TsignUpResponse = z.infer<typeof signUpResponseSchema>;
+
+// Reqs schema
+export const ReqsSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+// Course schema
+export const CourseSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  units: z.number(),
+  lesson_group: z.number(),
+  pre_reqs: z.array(ReqsSchema),
+  co_reqs: z.array(ReqsSchema),
+  passed: z.string(),
+  mark: z.number(),
+});
+
+// Date and time for scheduling
+const DayTimeSchema = z.object({
+  from: z.string(),
+  to: z.string(),
+});
+
+const ExamSchema = z.object({
+  date: z.string(),
+  time: z.string(),
+});
+
+export const DateAndTimeSchema = z.object({
+  saturday: DayTimeSchema.optional(),
+  sunday: DayTimeSchema.optional(),
+  monday: DayTimeSchema.optional(),
+  tuesday: DayTimeSchema.optional(),
+  wednesday: DayTimeSchema.optional(),
+  exam: ExamSchema.optional(),
+});
+
+// Eligible schema
+export const EligibleSchema = z.object({
+  collegeID: z.string(),
+  collegeName: z.string(),
+  groupID: z.number(),
+  groupName: z.string(),
+  courseID: z.string(),
+  courseName: z.string(),
+  totalUnit: z.number(),
+  practicalUnit: z.number(),
+  capacity: z.number(),
+  registeredCount: z.number(),
+  waitListCount: z.number(),
+  gender: z.string(),
+  professor: z.string(),
+  dateAndTime: DateAndTimeSchema,
+  description: z.string(),
+});
+
+// Term schema
+export const TermSchema = z.object({
+  term_number: z.number(),
+  courses: z.array(CourseSchema),
+  total_units: z.number(),
+  total_passed: z.number().optional(),
+  grade: z.number().optional(),
+});
+
+// Student schema
+export const StudentSchema = z.object({
+  student_id: z.number(),
+  name: z.string(),
+  passed_units: z.number(),
+  terms: z.array(TermSchema),
+  remaining_terms: z.array(TermSchema),
+  eligibles: z.array(EligibleSchema),
+});
+
+export type Student = z.infer<typeof StudentSchema>;

@@ -19,6 +19,8 @@ import { useRouter } from "next/navigation";
 import { loginAction } from "@/core/actions";
 import showToast from "@/utils/showToast";
 
+import BackButton from "@/components/Buttons/BackButton";
+
 const Login = () => {
   const {
     register,
@@ -148,7 +150,7 @@ const Login = () => {
           margin: "5px",
         }}
       >
-        حساب کاربری ندارید؟ <Link href="/SignUp">ثبت نام کنید</Link>
+        حساب کاربری ندارید؟ <Link href="/register">ثبت نام کنید</Link>
       </Typography>
       <button
         className="button-48"
@@ -163,6 +165,7 @@ const Login = () => {
           <span>ورود</span>
         )}
       </button>
+      <BackButton />
     </Box>
   );
 };

@@ -20,7 +20,9 @@ import { useRouter } from "next/navigation";
 import { signup } from "@/core/services/api/auth/signup.api";
 import showToast from "@/utils/showToast";
 
-export default function SignUp() {
+import BackButton from "@/components/Buttons/BackButton";
+
+export default function Register() {
   const {
     register,
     handleSubmit,
@@ -232,7 +234,7 @@ export default function SignUp() {
           padding: "5px",
         }}
       >
-        حساب کاربری دارید؟ <Link href="/Login">وارد شوید</Link>
+        حساب کاربری دارید؟ <Link href="/login">وارد شوید</Link>
       </Typography>
       <button
         className="button-48"
@@ -247,6 +249,7 @@ export default function SignUp() {
           <span>ثبت نام</span>
         )}
       </button>
+      <BackButton />
     </Box>
   );
 }

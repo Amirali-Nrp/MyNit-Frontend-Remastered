@@ -2,16 +2,16 @@
 
 import React from "react";
 
-import { Box, Container, CssBaseline, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+
+import GlassContainer from "@/components/Glass/GlassContainer";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="absolute flex h-full w-full items-center justify-center bg-[url('/assets/nit-map.png')] bg-cover text-white">
-      <Container
-        component="main"
-        maxWidth="sm"
-        sx={{ mt: 5 }}
-        className="mx-12 rounded-xl bg-white bg-opacity-0 p-12 sm:bg-opacity-10 sm:backdrop-blur-sm"
+    <div className="absolute flex min-h-screen w-full items-center justify-center bg-[url('/assets/nit-map.png')] bg-cover text-white">
+      <GlassContainer
+        className=" w-full p-6 sm:w-fit sm:max-w-xl sm:rounded-3xl sm:p-12"
+        variant="dark"
       >
         <Box
           sx={{
@@ -35,7 +35,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
           </Typography>
           {children}
         </Box>
-      </Container>
+      </GlassContainer>
     </div>
   );
 }

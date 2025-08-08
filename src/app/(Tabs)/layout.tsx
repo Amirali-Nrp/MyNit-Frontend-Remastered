@@ -11,7 +11,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Header />
       <Box className="flex h-screen flex-row justify-start">
         <Sidebar />
-        <Box className="flex-1 bg-primary p-4 text-white">{children}</Box>
+        <Box className=" mx-8 mt-32 flex-1 bg-primary text-white lg:m-32">
+          {children}
+        </Box>
       </Box>
     </>
   );

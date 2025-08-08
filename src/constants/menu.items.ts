@@ -20,7 +20,7 @@ export const menuItems: MenuItem[] = [
   {
     id: 2,
     name: "ترم های گذشته و جاری",
-    href: "/Chart",
+    href: "/chart",
     icon: CiViewTable,
   },
 

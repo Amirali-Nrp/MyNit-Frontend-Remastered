@@ -6,7 +6,7 @@ import axios, { type AxiosError, type AxiosResponse } from "axios";
 import { auth } from "@/lib/auth";
 
 const instance = axios.create({
-  baseURL: parsedEnv.API_URL,
+  baseURL: parsedEnv.NEXT_PUBLIC_API_URL,
 });
 
 const onSuccess = (response: AxiosResponse) => {

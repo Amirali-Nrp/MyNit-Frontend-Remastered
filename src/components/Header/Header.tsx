@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import useGetUnits from "@/core/services/api/use-getunits";
 import { useSidebarStorage } from "@/storage/storage";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Avatar, Tooltip } from "@mui/material";
@@ -31,6 +32,8 @@ export default function Header() {
   const handleSidebarToggle = () => {
     setToggleCollapse(!toggleCollapse);
   };
+
+  const { data: studentInfo } = useGetUnits();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -62,7 +65,13 @@ export default function Header() {
           {
             <div>
               <Tooltip title="تنظیمات کاربر">
-                <IconButton onClick={handleMenu} sx={{ p: 0 }}>
+                <IconButton onClick={handleMenu} sx={{ p: 0, gap: 2 }}>
+                  <Typography
+                    className="hidden sm:flex"
+                    sx={{ fontFamily: "Vazirmatn" }}
+                  >
+                    {studentInfo?.name}
+                  </Typography>
                   <Avatar alt="" src="" />
                 </IconButton>
               </Tooltip>
