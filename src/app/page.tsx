@@ -39,12 +39,12 @@ export default function Home() {
               gap: 2,
             }}
           >
-            <button className="button-48" onClick={() => router.push("/Login")}>
+            <button className="button-48" onClick={() => router.push("/login")}>
               <span>ورود</span>
             </button>
             <button
               className="button-48"
-              onClick={() => router.push("/SignUp")}
+              onClick={() => router.push("/register")}
             >
               <span>ثبت نام</span>
             </button>
