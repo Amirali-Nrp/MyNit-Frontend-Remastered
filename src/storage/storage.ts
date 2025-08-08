@@ -1,10 +1,5 @@
-import { SideBarState, StudentState } from "@/types";
+import { SideBarState } from "@/types";
 import { create } from "zustand";
-
-export const useStudentStorage = create<StudentState>((set) => ({
-  studentId: null,
-  setStudentId: (Id) => set(() => ({ studentId: Id })),
-}));
 
 export const useSidebarStorage = create<SideBarState>((set) => ({
   isCollapsible: false,

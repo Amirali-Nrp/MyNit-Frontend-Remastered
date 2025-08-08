@@ -20,20 +20,20 @@ export const menuItems: MenuItem[] = [
   {
     id: 2,
     name: "ترم های گذشته و جاری",
-    href: "/chart",
+    href: "/terms",
     icon: CiViewTable,
   },
 
   {
     id: 3,
     name: "چارت پیشنهادی دانشکده",
-    href: "/SuggestedCollegeChart",
+    href: "/SuggestedUniversityChart",
     icon: FaUniversity,
   },
   {
     id: 4,
     name: "چارت پیشنهادی هوشمند",
-    href: "/SuggestedAIChart",
+    href: "/SuggestedSystemChart",
     icon: LuBrainCircuit,
   },
   {

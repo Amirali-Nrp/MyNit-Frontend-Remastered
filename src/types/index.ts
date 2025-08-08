@@ -1,10 +1,5 @@
 import { IconType } from "react-icons/lib";
 
-export interface StudentState {
-  studentId: string | null;
-  setStudentId: (student: string | null) => void | any;
-}
-
 export type MenuItem = {
   id: number;
   name: string;

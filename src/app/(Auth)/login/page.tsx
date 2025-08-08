@@ -2,13 +2,7 @@
 
 import { loginObject, TloginObject } from "@/validation/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Box,
-  CircularProgress,
-  Link,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, Link, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 import "@/app/button.css";
@@ -19,27 +13,26 @@ import { useRouter } from "next/navigation";
 import { loginAction } from "@/core/actions";
 import showToast from "@/utils/showToast";
 
+import StudentIdField from "@/components/Auth/Login/StudentIdField";
+import PasswordField from "@/components/Auth/PasswordField";
 import BackButton from "@/components/Buttons/BackButton";
 
-const Login = () => {
+export default function Page() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<TloginObject>({
-    resolver: zodResolver(loginObject),
-  });
+  } = useForm<TloginObject>({ resolver: zodResolver(loginObject) });
 
   const [isLoading, setIsLoading] = useState(false);
-
   const router = useRouter();
 
   const handleLogin = async (data: TloginObject) => {
     setIsLoading(true);
     const result = await loginAction(data);
 
-    if (result == "Success") {
+    if (result === "Success") {
       showToast("ورود با موفقیت انجام شد", "success", 3000);
       router.push("/dashboard");
     } else {
@@ -58,100 +51,31 @@ const Login = () => {
       sx={{ mt: 1 }}
     >
       <Typography
-        sx={{
-          textAlign: "center",
-          fontSize: "21px",
-          fontWeight: "550",
-        }}
+        sx={{ textAlign: "center", fontSize: "21px", fontWeight: 550 }}
       >
         ورود به حساب کاربری
       </Typography>
-      <TextField
-        {...register("id")}
-        margin="normal"
-        fullWidth
-        required
-        id="id"
-        label="شماره دانشجویی"
-        name="id"
-        autoComplete="id"
-        autoFocus
-        sx={{
-          "& label.Mui-focused": {
-            color: "white",
-          },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "white",
-            },
-            "&:hover fieldset": {
-              borderColor: "white",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "white",
-            },
-          },
-        }}
-        InputProps={{
-          sx: { borderRadius: 50, color: "white" },
-          inputMode: "numeric",
-        }}
-        InputLabelProps={{
-          sx: { fontFamily: "vazirmatn", color: "white" },
-        }}
-        error={!!errors.id}
+
+      <StudentIdField
+        register={register}
+        error={errors.id}
         helperText={errors.id?.message}
       />
-      <TextField
-        {...register("password")}
-        margin="normal"
-        fullWidth
-        required
+
+      <PasswordField
+        register={register}
         name="password"
         label="رمزعبور"
-        type="password"
-        id="password"
-        autoComplete="current-password"
-        sx={{
-          "& label.Mui-focused": {
-            color: "white",
-          },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "white",
-            },
-            "&:hover fieldset": {
-              borderColor: "white",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "white",
-            },
-          },
-        }}
-        InputProps={{ sx: { borderRadius: 50, color: "white" } }}
-        InputLabelProps={{
-          sx: { fontFamily: "vazirmatn", color: "white" },
-        }}
-        error={!!errors.password}
+        error={errors.password}
         helperText={errors.password?.message}
       />
-      {/* <FormControlLabel
-    control={<Checkbox value="remember" color="primary" />}
-    label={
-      <Typography fontFamily="Vazirmatn">مرا به خاطر بسپار</Typography>
-    }
-    sx={{ marginLeft: 1, direction: "rtl" }}
-  /> */}
+
       <Typography
-        sx={{
-          textAlign: "left",
-          fontSize: "16px",
-          fontWeight: "500",
-          margin: "5px",
-        }}
+        sx={{ textAlign: "left", fontSize: "16px", fontWeight: 500, m: "5px" }}
       >
         حساب کاربری ندارید؟ <Link href="/register">ثبت نام کنید</Link>
       </Typography>
+
       <button
         className="button-48"
         disabled={isLoading || isSubmitting}
@@ -165,9 +89,8 @@ const Login = () => {
           <span>ورود</span>
         )}
       </button>
+
       <BackButton />
     </Box>
   );
-};
-
-export default Login;
+}
