@@ -2,6 +2,10 @@
 import React from "react";
 import { useRouter } from "next/navigation"; // for Pages Router
 
+import { Button } from "@mui/material";
+
+import Button48 from "./Button48";
+
 // import { useRouter } from 'next/navigation' // for App Router
 
 type BackButtonProps = {
@@ -20,11 +24,7 @@ const BackButton: React.FC<BackButtonProps> = ({ fallback = "/" }) => {
     }
   };
 
-  return (
-    <button type="button" onClick={handleClick} className="button-48">
-      <span>بازگشت</span>
-    </button>
-  );
+  return <Button48 label="بازگشت" onClick={handleClick} />;
 };
 
 export default BackButton;

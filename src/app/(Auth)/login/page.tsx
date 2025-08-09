@@ -16,6 +16,7 @@ import showToast from "@/utils/showToast";
 import StudentIdField from "@/components/Auth/Login/StudentIdField";
 import PasswordField from "@/components/Auth/PasswordField";
 import BackButton from "@/components/Buttons/BackButton";
+import Button48 from "@/components/Buttons/Button48";
 
 export default function Page() {
   const {
@@ -76,19 +77,11 @@ export default function Page() {
         حساب کاربری ندارید؟ <Link href="/register">ثبت نام کنید</Link>
       </Typography>
 
-      <button
-        className="button-48"
-        disabled={isLoading || isSubmitting}
+      <Button48
+        loading={isLoading || isSubmitting}
         type="submit"
-      >
-        {isSubmitting || isLoading ? (
-          <div className="flex w-full items-center justify-center">
-            <CircularProgress />
-          </div>
-        ) : (
-          <span>ورود</span>
-        )}
-      </button>
+        label="ورود"
+      />
 
       <BackButton />
     </Box>

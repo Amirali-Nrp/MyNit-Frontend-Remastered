@@ -23,6 +23,7 @@ import showToast from "@/utils/showToast";
 // ⬇️ NEW: use the generic PasswordField for show/hide and clean RHF wiring
 import PasswordField from "@/components/Auth/PasswordField";
 import BackButton from "@/components/Buttons/BackButton";
+import Button48 from "@/components/Buttons/Button48";
 
 export default function Register() {
   const {
@@ -136,19 +137,11 @@ export default function Register() {
         حساب کاربری دارید؟ <Link href="/login">وارد شوید</Link>
       </Typography>
 
-      <button
-        className="button-48"
-        disabled={isLoading || isSubmitting}
+      <Button48
+        loading={isLoading || isSubmitting}
         type="submit"
-      >
-        {isSubmitting || isLoading ? (
-          <div className="flex w-full items-center justify-center">
-            <CircularProgress />
-          </div>
-        ) : (
-          <span>ثبت نام</span>
-        )}
-      </button>
+        label="ثبت نام"
+      />
 
       <BackButton />
     </Box>

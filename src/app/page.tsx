@@ -6,6 +6,8 @@ import { Box, Container, Typography } from "@mui/material";
 
 import "@/app/button.css";
 
+import Button48 from "@/components/Buttons/Button48";
+
 export default function Home() {
   const router = useRouter();
 
@@ -39,15 +41,11 @@ export default function Home() {
               gap: 2,
             }}
           >
-            <button className="button-48" onClick={() => router.push("/login")}>
-              <span>ورود</span>
-            </button>
-            <button
-              className="button-48"
+            <Button48 label="ورود" onClick={() => router.push("/login")} />
+            <Button48
+              label="ثبت نام"
               onClick={() => router.push("/register")}
-            >
-              <span>ثبت نام</span>
-            </button>
+            />
           </Box>
         </Box>
       </Container>

@@ -33,10 +33,15 @@ const ChartTable: React.FC<ChartTableProps> = ({
   isRemaining = false,
 }) => {
   const showAssessments = !isRemaining; // show grade/status when not remaining
-  const colCount = 4 + (showAssessments ? 2 : 0);
+  const formattedTotalGrade =
+    totalGrade !== undefined &&
+    totalGrade !== null &&
+    !Number.isNaN(Number(totalGrade))
+      ? Number(totalGrade).toFixed(2)
+      : "-";
 
   return (
-    <div className="min-h-[300px] overflow-hidden rounded-2xl bg-white shadow-sm">
+    <div className="min-h-[300px] overflow-hidden rounded-2xl bg-gray-100 shadow-sm">
       {/* Header */}
       <div className="bg-gray-100 py-3 text-center text-lg font-semibold text-black">
         ترم {semester}
@@ -47,9 +52,7 @@ const ChartTable: React.FC<ChartTableProps> = ({
         <table dir="rtl" className="min-w-full text-right text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-black first:rounded-tl-2xl last:rounded-tr-2xl">
-                کد درس
-              </th>
+              <th className="px-4 py-3 text-black">کد درس</th>
               <th className="px-4 py-3 text-black">نام درس</th>
               <th className="px-4 py-3 text-black">واحد</th>
               <th className="px-4 py-3 text-black">پیش‌نیاز (هم‌نیاز)</th>
@@ -91,27 +94,51 @@ const ChartTable: React.FC<ChartTableProps> = ({
             ))}
           </tbody>
 
-          {/* Totals Footer (responsive to dynamic column count) */}
+          {/* Totals FOOTER — single row; values inline with labels */}
           <tfoot>
-            <tr>
-              <td colSpan={colCount} className="bg-gray-100">
-                <div className="grid grid-cols-3 gap-4 px-4 py-3">
-                  <div>
-                    <div className="font-semibold text-black">جمع واحد</div>
-                    <div className="text-gray-500">{totalUnits}</div>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-black">
-                      واحدهای گذرانده
-                    </div>
-                    <div className="text-gray-500">{totalPassedUnits}</div>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-black">معدل</div>
-                    <div className="text-gray-500">{totalGrade}</div>
-                  </div>
-                </div>
+            <tr className="bg-gray-100">
+              {/* under: کد درس */}
+              <td className="px-4 py-3"></td>
+              {/* under: نام درس */}
+              <td className="px-4 py-3"></td>
+              {/* under: واحد → show total + passed units inline */}
+              <td className="px-4 py-3">
+                <span className="font-semibold text-black">
+                  جمع واحد:{" "}
+                  <span className="font-normal text-gray-600">
+                    {totalUnits}
+                  </span>
+                </span>
               </td>
+              {/* under: پیش‌نیاز (هم‌نیاز) */}
+              {showAssessments && totalPassedUnits && (
+                <>
+                  <td className="px-4 py-3">
+                    <span className="font-semibold text-black">
+                      گذرانده:{" "}
+                      <span className="font-normal text-gray-600">
+                        {totalPassedUnits}
+                      </span>
+                    </span>
+                  </td>
+                </>
+              )}
+
+              {showAssessments && (
+                <>
+                  {/* under: نمره → show total grade rounded */}
+                  <td className="px-4 py-3">
+                    <span className="font-semibold text-black">
+                      معدل:{" "}
+                      <span className="font-normal text-gray-600">
+                        {formattedTotalGrade}
+                      </span>
+                    </span>
+                  </td>
+                  {/* under: وضعیت */}
+                  <td className="px-4 py-3"></td>
+                </>
+              )}
             </tr>
           </tfoot>
         </table>
@@ -144,13 +171,28 @@ const ChartTable: React.FC<ChartTableProps> = ({
           </div>
         ))}
 
-        {/* Mobile Totals */}
+        {/* Mobile Totals (already inline label:value) */}
         <div className="space-y-2 rounded-lg bg-gray-100 p-4">
-          <div className="font-semibold text-black">جمع واحد: {totalUnits}</div>
           <div className="font-semibold text-black">
-            واحدهای گذرانده: {totalPassedUnits}
+            جمع واحد:{" "}
+            <span className="font-normal text-gray-600">{totalUnits}</span>
           </div>
-          <div className="font-semibold text-black">معدل: {totalGrade}</div>
+          {showAssessments && totalPassedUnits && (
+            <div className="font-semibold text-black">
+              واحدهای گذرانده:{" "}
+              <span className="font-normal text-gray-600">
+                {totalPassedUnits}
+              </span>
+            </div>
+          )}
+          {showAssessments && (
+            <div className="font-semibold text-black">
+              معدل:{" "}
+              <span className="font-normal text-gray-600">
+                {formattedTotalGrade}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
