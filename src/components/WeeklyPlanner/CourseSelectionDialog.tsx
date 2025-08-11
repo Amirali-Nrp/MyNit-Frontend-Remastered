@@ -52,8 +52,15 @@ export default function CourseSelectionDialog({
         value={tab}
         onChange={(_, v) => setTab(v)}
         aria-label="course categories"
-        variant="scrollable"
-        scrollButtons
+        sx={{
+          paddingX: "24px",
+          "& .Mui-selected": {
+            color: "#0f172a !important",
+          },
+          "& .MuiTabs-indicator": {
+            backgroundColor: "#0f172a",
+          },
+        }}
       >
         <Tab label="تخصصی" />
         <Tab label="علوم پایه" />
@@ -87,6 +94,10 @@ export default function CourseSelectionDialog({
               },
               "& .MuiDataGrid-row:nth-of-type(odd)": { bgcolor: "#ffffff" },
               "& .MuiDataGrid-row:nth-of-type(even)": { bgcolor: "#f8fafc" },
+              "& .MuiDataGrid-columnHeader, & .MuiDataGrid-columnHeader .MuiSvgIcon-root":
+                {
+                  color: "#fff",
+                },
             }}
           />
         </Box>

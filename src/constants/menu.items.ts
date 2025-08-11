@@ -46,7 +46,7 @@ export const menuItems: MenuItem[] = [
   {
     id: 6,
     name: "پیشنهاد برنامه هفتگی",
-    href: "/SuggestWeeklyPlans",
+    href: "/autoWeeklyPlanner",
     icon: BsCalendar3Week,
   },
   {

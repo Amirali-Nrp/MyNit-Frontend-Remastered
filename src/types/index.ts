@@ -85,3 +85,8 @@ export interface DateAndTime {
   wednesday?: DayTime;
   exam?: ExamTime;
 }
+
+export interface plan {
+  courses: Eligible[];
+  totalUnits: string;
+}

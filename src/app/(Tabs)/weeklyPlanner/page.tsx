@@ -4,24 +4,11 @@ import React, { useMemo, useState } from "react";
 
 import { DayKey, TIME_SLOTS, WEEK_DAYS } from "@/constants";
 import useGetUnits from "@/core/services/api/use-getunits";
+import { useWeeklyPlanStorage } from "@/storage/storage";
 import { DayTime, Eligible } from "@/types";
 import showToast from "@/utils/showToast";
 import { dayLabel, examRange, parseGroup, rangesOverlap } from "@/utils/utils";
-import {
-  Box,
-  Card,
-  CardContent,
-  Chip,
-  CircularProgress,
-  Dialog,
-  DialogContent,
-  IconButton,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Copy, Trash2, X } from "lucide-react";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 import CourseSelectionDialog from "@/components/WeeklyPlanner/CourseSelectionDialog";
 import ScheduleGrid from "@/components/WeeklyPlanner/ScheduleGrid";
@@ -34,7 +21,8 @@ export default function WeeklyCoursePlanner() {
 
   const courses: Eligible[] | undefined = data?.eligibles;
 
-  const [selected, setSelected] = useState<Record<string, Eligible>>({});
+  const { selected, setSelected } = useWeeklyPlanStorage();
+
   const [cellAnchor, setCellAnchor] = useState<{
     day: DayKey;
     slot: number;
@@ -154,8 +142,8 @@ export default function WeeklyCoursePlanner() {
 
   if (isLoading) {
     return (
-      <Box p={4} display="flex" alignItems="center" justifyContent="center">
-        <CircularProgress />
+      <Box className="flex h-full items-center justify-center">
+        <CircularProgress sx={{ color: "#0f172a" }} />
       </Box>
     );
   }

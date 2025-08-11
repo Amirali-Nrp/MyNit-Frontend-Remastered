@@ -17,7 +17,7 @@ export const TIME_SLOTS: {
   { id: 2, from: "13:30", to: "15:00", label: "13:30 / 15:00" },
   { id: 3, from: "15:30", to: "17:00", label: "15:30 / 17:00" },
   { id: 4, from: "17:30", to: "19:00", label: "17:30 / 19:00" },
-  { id: 5, from: "19:00", to: "21:30", label: "19:00 / 21:30" },
+  // { id: 5, from: "19:00", to: "21:30", label: "19:00 / 21:30" },
 ];
 
 export type DayKey = (typeof WEEK_DAYS)[number]["key"];
