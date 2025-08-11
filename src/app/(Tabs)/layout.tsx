@@ -7,7 +7,7 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
+    <Box overflow="auto">
       <Header />
       <Box className="flex h-screen flex-row justify-start">
         <Sidebar />
@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </Box>
       </Box>
-    </>
+    </Box>
   );
 };
 

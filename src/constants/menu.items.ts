@@ -40,7 +40,7 @@ export const menuItems: MenuItem[] = [
     id: 5,
 
     name: "پیش ثبت نام",
-    href: "/PreCourseSelect",
+    href: "/weeklyPlanner",
     icon: GrCheckboxSelected,
   },
   {
