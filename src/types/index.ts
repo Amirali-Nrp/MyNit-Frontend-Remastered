@@ -41,15 +41,6 @@ export interface Term {
   grade?: number;
 }
 
-export interface dateAndTime {
-  sunday?: { from: string; to: string };
-  saturday?: { from: string; to: string };
-  monday?: { from: string; to: string };
-  tuesday?: { from: string; to: string };
-  wednesday?: { from: string; to: string };
-  exam?: { date: string; time: string };
-}
-
 export interface Eligible {
   collegeID: string;
   collegeName: string;
@@ -64,7 +55,7 @@ export interface Eligible {
   waitListCount: number;
   gender: string;
   professor: string;
-  dateAndTime: dateAndTime;
+  dateAndTime: DateAndTime;
   description: string;
 }
 export interface Student {
@@ -74,4 +65,23 @@ export interface Student {
   terms: Term[];
   remaining_terms: Term[];
   eligibles: Eligible[];
+}
+
+export interface DayTime {
+  from: string; // "HH:MM"
+  to: string; // "HH:MM"
+}
+
+export interface ExamTime {
+  date: string; // "YYYY.MM.DD"
+  time: string; // "HH:MM-HH:MM"
+}
+
+export interface DateAndTime {
+  saturday?: DayTime;
+  sunday?: DayTime;
+  monday?: DayTime;
+  tuesday?: DayTime;
+  wednesday?: DayTime;
+  exam?: ExamTime;
 }

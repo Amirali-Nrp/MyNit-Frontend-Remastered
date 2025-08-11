@@ -2,8 +2,11 @@
 
 import React, { useMemo, useState } from "react";
 
+import { DayKey, TIME_SLOTS, WEEK_DAYS } from "@/constants";
 import useGetUnits from "@/core/services/api/use-getunits";
+import { DayTime, Eligible } from "@/types";
 import showToast from "@/utils/showToast";
+import { dayLabel, examRange, parseGroup, rangesOverlap } from "@/utils/utils";
 import {
   Box,
   Card,
@@ -20,173 +23,18 @@ import {
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Copy, Trash2, X } from "lucide-react";
 
-// -------------------- Types --------------------
-interface DayTime {
-  from: string; // "HH:MM"
-  to: string; // "HH:MM"
-}
+import CourseSelectionDialog from "@/components/WeeklyPlanner/CourseSelectionDialog";
+import ScheduleGrid from "@/components/WeeklyPlanner/ScheduleGrid";
+import SelectedCoursesList from "@/components/WeeklyPlanner/SelectedCoursesList";
+import SelectedExamsList from "@/components/WeeklyPlanner/SelectedExamsList";
+import UsageHints from "@/components/WeeklyPlanner/UsageHints";
 
-interface ExamTime {
-  date: string; // "YYYY.MM.DD"
-  time: string; // "HH:MM-HH:MM"
-}
-
-interface DateAndTime {
-  saturday?: DayTime;
-  sunday?: DayTime;
-  monday?: DayTime;
-  tuesday?: DayTime;
-  wednesday?: DayTime;
-  exam?: ExamTime;
-}
-
-interface Eligible {
-  collegeID: string;
-  collegeName: string;
-  groupID: number | string;
-  groupName: string;
-  courseID: string;
-  courseName: string;
-  totalUnit: number;
-  practicalUnit: number;
-  capacity: number;
-  registeredCount: number;
-  waitListCount: number;
-  gender: string;
-  professor: string;
-  dateAndTime: DateAndTime;
-  description: string;
-}
-
-// -------------------- Constants --------------------
-const WEEK_DAYS = [
-  { key: "saturday", label: "شنبه" },
-  { key: "sunday", label: "یکشنبه" },
-  { key: "monday", label: "دوشنبه" },
-  { key: "tuesday", label: "سه‌شنبه" },
-  { key: "wednesday", label: "چهارشنبه" },
-] as const;
-
-const TIME_SLOTS: { id: number; from: string; to: string; label: string }[] = [
-  { id: 0, from: "08:00", to: "09:30", label: "8:00 / 9:30" },
-  { id: 1, from: "10:00", to: "11:30", label: "10:00 / 11:30" },
-  { id: 2, from: "13:30", to: "15:00", label: "13:30 / 15:00" },
-  { id: 3, from: "15:30", to: "17:00", label: "15:30 / 17:00" },
-  { id: 4, from: "17:30", to: "19:00", label: "17:30 / 19:00" },
-  { id: 5, from: "19:00", to: "21:30", label: "19:00 / 21:30" },
-];
-
-type DayKey = (typeof WEEK_DAYS)[number]["key"];
-
-// -------------------- Utils --------------------
-const toMinutes = (hhmm: string) => {
-  const [h, m] = hhmm.split(":").map((n) => parseInt(n, 10));
-  return h * 60 + m;
-};
-
-const rangesOverlap = (
-  aFrom: string,
-  aTo: string,
-  bFrom: string,
-  bTo: string
-) => {
-  const a1 = toMinutes(aFrom);
-  const a2 = toMinutes(aTo);
-  const b1 = toMinutes(bFrom);
-  const b2 = toMinutes(bTo);
-  return Math.max(a1, b1) < Math.min(a2, b2);
-};
-
-const examRange = (exam?: ExamTime) => {
-  if (!exam?.time) return { from: 0, to: 0 };
-  const [f, t] = exam.time.split("-");
-  return { from: toMinutes(f), to: toMinutes(t) };
-};
-
-const formatClassDateAndTime = (dt: DateAndTime) => {
-  const out: string[] = [];
-  WEEK_DAYS.forEach(({ key, label }) => {
-    const d = (dt as any)[key] as DayTime | undefined;
-    if (d) out.push(`${label} ${d.from} تا ${d.to}`);
-  });
-  return out;
-};
-
-const formatExamDateAndTime = (dt: DateAndTime) => {
-  const e = dt.exam;
-  if (!e) return [] as string[];
-  return [`${e.date}`, `${e.time.replace("-", " تا ")}`];
-};
-
-// parse group number from courseID (after underscore)
-const parseGroup = (courseID: string) => {
-  const parts = courseID.split("_");
-  return parts[1] || "";
-};
-
-// -------------------- Columns (MUI DataGrid) --------------------
-const makeColumns = (): GridColDef[] => [
-  { field: "courseID", headerName: "کد درس", width: 110, cellClassName: "ltr" },
-  { field: "courseName", headerName: "نام درس", width: 250 },
-  { field: "professor", headerName: "استاد ارائه دهنده", width: 200 },
-  {
-    field: "capacity",
-    headerName: "ظرفیت",
-    width: 100,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "totalUnit",
-    headerName: "تعداد واحد ها",
-    width: 130,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "classDateAndTime",
-    headerName: "زمان برگزاری",
-    width: 250,
-    renderCell(params) {
-      return (
-        <Box display="flex" flexDirection="column">
-          {formatClassDateAndTime(params.row.dateAndTime).map(
-            (line: string) => (
-              <Typography key={line} variant="body2" sx={{ my: 0.5 }}>
-                {line}
-              </Typography>
-            )
-          )}
-        </Box>
-      );
-    },
-  },
-  {
-    field: "examDateAndTime",
-    headerName: "زمان برگزاری امتحان",
-    width: 170,
-    renderCell(params) {
-      return (
-        <Box display="flex" flexDirection="column">
-          {formatExamDateAndTime(params.row.dateAndTime).map((line: string) => (
-            <Typography key={line} variant="body2" sx={{ my: 0.5 }}>
-              {line}
-            </Typography>
-          ))}
-        </Box>
-      );
-    },
-  },
-  { field: "gender", headerName: "گروه", width: 100 },
-];
-
-// -------------------- Main Component --------------------
 export default function WeeklyCoursePlanner() {
   const { data, isError, isLoading } = useGetUnits();
 
   const courses: Eligible[] | undefined = data?.eligibles;
 
-  const [selected, setSelected] = useState<Record<string, Eligible>>({}); // courseID -> Eligible
+  const [selected, setSelected] = useState<Record<string, Eligible>>({});
   const [cellAnchor, setCellAnchor] = useState<{
     day: DayKey;
     slot: number;
@@ -206,13 +54,10 @@ export default function WeeklyCoursePlanner() {
     ];
   }, [courses]);
 
-  const columns = useMemo(() => makeColumns(), []);
-
   const handleOpen = (day: DayKey, slotIdx: number) =>
     setCellAnchor({ day, slot: slotIdx });
   const handleClose = () => setCellAnchor(null);
 
-  // Filter dialog rows to only those compatible with clicked cell
   const compatibleRows = useMemo(() => {
     if (!cellAnchor) return [] as Eligible[];
     const { day, slot } = cellAnchor;
@@ -227,10 +72,6 @@ export default function WeeklyCoursePlanner() {
 
     return byCategory[tab] ? filterByTime(byCategory[tab]) : [];
   }, [byCategory, cellAnchor, tab]);
-
-  // ---------- Conflict checks ----------
-  const dayLabel = (k: DayKey) =>
-    WEEK_DAYS.find((d) => d.key === k)?.label ?? "";
 
   type ClassConflict = { other: Eligible; day: DayKey };
   const findClassConflicts = (candidate: Eligible): ClassConflict[] => {
@@ -311,16 +152,6 @@ export default function WeeklyCoursePlanner() {
     });
   };
 
-  // Determine which course occupies a given cell (day+slot)
-  const courseAt = (day: DayKey, slotIdx: number) => {
-    const slot = TIME_SLOTS[slotIdx];
-    return Object.values(selected).find((c) => {
-      const dt = (c.dateAndTime as any)[day] as DayTime | undefined;
-      return dt ? rangesOverlap(dt.from, dt.to, slot.from, slot.to) : false;
-    });
-  };
-
-  // -------------------- Render --------------------
   if (isLoading) {
     return (
       <Box p={4} display="flex" alignItems="center" justifyContent="center">
@@ -339,263 +170,26 @@ export default function WeeklyCoursePlanner() {
 
   return (
     <Box dir="rtl" sx={{ width: "100%", fontFamily: "Vazirmatn" }}>
-      {/* Header row */}
-      <Box
-        display="grid"
-        gridTemplateColumns={`140px repeat(${TIME_SLOTS.length}, 1fr)`}
-        sx={{
-          borderRadius: 2,
-          overflow: "hidden",
-          border: "1px solid #e5e7eb",
-          boxShadow: "0 6px 20px rgba(2,6,23,.06)",
-          background: "linear-gradient(180deg,#ffffff, #fbfdff)",
-        }}
-      >
-        <Box sx={{ bgcolor: "#0f172a", p: 2 }}>
-          <Typography fontWeight={700} color="#fff">
-            روز / ساعت
-          </Typography>
-        </Box>
-        {TIME_SLOTS.map((s, cIdx) => (
-          <Box
-            key={s.id}
-            sx={{ p: 2, bgcolor: cIdx % 2 === 0 ? "#0f172a" : "#111827" }}
-          >
-            <Typography
-              variant="body2"
-              textAlign="center"
-              fontWeight={700}
-              color="#fff"
-            >
-              {s.label}
-            </Typography>
-          </Box>
-        ))}
-
-        {/* Body rows */}
-        {WEEK_DAYS.map((d) => (
-          <React.Fragment key={d.key}>
-            <Box
-              sx={{ p: 2, bgcolor: "#ffffff", borderTop: "1px solid #e5e7eb" }}
-            >
-              <Typography fontWeight={700} color="#0f172a">
-                {d.label}
-              </Typography>
-            </Box>
-            {TIME_SLOTS.map((s, cIdx) => {
-              const occupying = courseAt(d.key, cIdx);
-              const colBg = cIdx % 2 === 0 ? "#f8fafc" : "#eef2ff"; // column striping
-              return (
-                <Box
-                  key={`${d.key}-${s.id}`}
-                  onClick={() =>
-                    occupying
-                      ? removeCourse(occupying.courseID)
-                      : handleOpen(d.key, cIdx)
-                  }
-                  sx={{
-                    p: 1.5,
-                    minHeight: 92,
-                    cursor: "pointer",
-                    borderTop: "1px solid #e5e7eb",
-                    borderLeft: "1px solid #e5e7eb",
-                    bgcolor: colBg,
-                    transition: "background .15s, transform .05s",
-                    ":hover": { bgcolor: "#e0f2fe" },
-                  }}
-                >
-                  {occupying ? (
-                    <Card
-                      elevation={0}
-                      sx={{
-                        bgcolor: "#ffffff",
-                        border: "1px solid #e2e8f0",
-                        borderRadius: 3,
-                        height: "100%",
-                      }}
-                    >
-                      <CardContent sx={{ p: 1.5 }}>
-                        <Box
-                          display="flex"
-                          justifyContent="space-between"
-                          alignItems="center"
-                          gap={1}
-                        >
-                          <Box>
-                            <Typography
-                              fontWeight={700}
-                              fontSize={14}
-                              color="#111827"
-                            >
-                              {occupying.courseName}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                              {occupying.professor}
-                            </Typography>
-                          </Box>
-                          <Box display="flex" flexDirection="column" gap={1}>
-                            <Chip
-                              label={`${occupying.totalUnit} واحد`}
-                              size="small"
-                            />
-                            <Chip
-                              label={`گروه ${parseGroup(occupying.courseID)}`}
-                              size="small"
-                            />
-                          </Box>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      height="100%"
-                    >
-                      <Typography variant="caption" color="text.secondary">
-                        انتخاب
-                      </Typography>
-                    </Box>
-                  )}
-                </Box>
-              );
-            })}
-          </React.Fragment>
-        ))}
-      </Box>
-      {/* Dialog */}
-      <Dialog open={!!cellAnchor} onClose={handleClose} fullWidth maxWidth="lg">
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          px={2}
-          pt={1}
-        >
-          <Typography fontWeight={700}>انتخاب درس</Typography>
-          <IconButton onClick={handleClose}>
-            <X />
-          </IconButton>
-        </Box>
-        <Tabs
-          value={tab}
-          onChange={(_, v) => setTab(v)}
-          aria-label="course categories"
-          variant="scrollable"
-          scrollButtons
-        >
-          <Tab label="تخصصی" />
-          <Tab label="علوم پایه" />
-          <Tab label="عمومی" />
-          <Tab label="تربیت بدنی و ورزش" />
-        </Tabs>
-        <DialogContent sx={{ height: 520 }}>
-          <Box height="100%">
-            <DataGrid
-              getRowId={(row) => row.courseID}
-              rows={compatibleRows}
-              columns={columns}
-              disableRowSelectionOnClick
-              hideFooterPagination
-              hideFooter
-              disableColumnMenu
-              onRowClick={(p) => addCourse(p.row as Eligible)}
-              slots={{
-                noRowsOverlay: () => (
-                  <Typography sx={{ p: 2 }}>
-                    موردی برای این بازه زمانی یافت نشد.
-                  </Typography>
-                ),
-              }}
-              sx={{
-                borderRadius: 2,
-                "& .MuiDataGrid-columnHeaders": {
-                  bgcolor: "#0f172a",
-                  color: "#fff",
-                  fontWeight: 700,
-                },
-                "& .MuiDataGrid-row:nth-of-type(odd)": { bgcolor: "#ffffff" },
-                "& .MuiDataGrid-row:nth-of-type(even)": { bgcolor: "#f8fafc" },
-              }}
-            />
-          </Box>
-        </DialogContent>
-      </Dialog>
-      {/* Selected courses quick glance */}
+      <ScheduleGrid
+        selected={selected}
+        removeCourse={removeCourse}
+        handleOpen={handleOpen}
+      />
+      <CourseSelectionDialog
+        open={!!cellAnchor}
+        onClose={handleClose}
+        tab={tab}
+        setTab={setTab}
+        compatibleRows={compatibleRows}
+        addCourse={addCourse}
+      />
       {Object.values(selected).length > 0 && (
-        <Box mt={3}>
-          <Typography color="#0f172a" fontWeight={700} mb={1}>
-            دروس انتخاب‌شده
-          </Typography>
-          <Box display="flex" flexWrap="wrap" gap={1}>
-            {Object.values(selected).map((c) => (
-              <Chip
-                key={`course-${c.courseID}`}
-                label={`${c.courseName} — ${c.courseID}`}
-                onClick={() => {
-                  navigator.clipboard.writeText(c.courseID);
-                  showToast("کد درس کپی شد", "success", 2000);
-                }}
-                // Use X icon as a copy button visual
-                deleteIcon={<Copy size={16} />}
-                onDelete={() => {
-                  navigator.clipboard.writeText(c.courseID);
-                  showToast("کد درس کپی شد", "success", 2000);
-                }}
-              />
-            ))}
-          </Box>
-        </Box>
+        <SelectedCoursesList selected={selected} />
       )}
-      {/* Selected exams quick glance */}
       {Object.values(selected).length > 0 && (
-        <Box mt={3}>
-          <Typography color="#0f172a" fontWeight={700} mb={1}>
-            امتحانات انتخاب‌شده
-          </Typography>
-          <Box display="flex" flexWrap="wrap" gap={1}>
-            {Object.values(selected).map((c) => (
-              <Chip
-                key={`exam-${c.courseID}`}
-                label={`${c.courseName} — ${c.dateAndTime.exam?.date ?? "بدون تاریخ"} / ${c.dateAndTime.exam?.time ?? "—"}`}
-                onDelete={() => removeCourse(c.courseID)}
-                deleteIcon={<Trash2 size={16} />}
-              />
-            ))}
-          </Box>
-        </Box>
+        <SelectedExamsList selected={selected} removeCourse={removeCourse} />
       )}
-      {/* Usage hints */}
-      <Box mt={5} p={2} borderTop="1px solid #0f172a">
-        <Typography fontWeight={700} mb={1} color="#0f172a">
-          راهنمای استفاده
-        </Typography>
-        <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
-          {[
-            "برای انتخاب درس، روی خانه‌ی خالی جدول در روز و ساعت مورد نظر کلیک کنید.",
-            "برای حذف یک درس، روی خانه‌ی پرشده کلیک کنید.",
-            "اگر زمان کلاس یا امتحان با درس دیگری تداخل داشته باشد، پیغام هشدار نمایش داده می‌شود.",
-            "در بخش «دروس انتخاب‌شده» می‌توانید کد درس را با کلیک کپی کنید.",
-            "در بخش «امتحانات انتخاب‌شده» می‌توانید با زدن علامت حذف، درس را از برنامه حذف کنید.",
-          ].map((hint, idx) => (
-            <Box
-              key={idx}
-              component="li"
-              display="flex"
-              alignItems="flex-start"
-              gap={1}
-              mb={0.5}
-              color="#0f172a"
-            >
-              *
-              <Typography variant="body2" color="text.secondary">
-                {hint}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-      </Box>
+      <UsageHints />
     </Box>
   );
 }
