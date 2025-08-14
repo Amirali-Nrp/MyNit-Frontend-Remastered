@@ -90,29 +90,7 @@ const Sidebar = () => {
         transition: "width 300ms cubic-bezier(0.2, 0, 0, 1) 0s",
       }}
     >
-      <GlassContainer className="rounded-md max-lg:flex max-lg:h-screen max-lg:items-center">
-        {/* <Box className="flex h-fit flex-col"> */}
-        {/* <Box className="relative flex items-center justify-between">
-            <Box className="flex items-center gap-4 pl-1">
-              <LogoIcon />
-              <span
-              className={cn("text-text mt-2 text-lg font-medium", {
-                hidden: toggleCollapse,
-              })}
-            >
-              Logo
-            </span>
-          </Box>
-          {isCollapsible && (
-            <button
-              className={collapseIconClasses}
-              onClick={handleSidebarToggle}
-            >
-              <CollapsIcon />
-            </button>
-          )}
-        </Box> */}
-
+      <GlassContainer className="rounded-md backdrop-blur-lg max-lg:flex max-lg:h-screen max-lg:items-center">
         <Box className="flex flex-col items-center gap-1 max-lg:w-full max-lg:px-4">
           {menuItems.map(({ icon: Icon, ...menu }) => {
             const classes = getNavItemClasses(menu);
@@ -122,7 +100,6 @@ const Sidebar = () => {
                   href={menu.href}
                   className="flex h-full w-full items-center px-3 py-4"
                 >
-                  {/* <a className="flex h-full w-full items-center px-3 py-4"> */}
                   <Box sx={{ width: "2.5rem" }}>
                     <Icon size={20} />
                   </Box>
@@ -131,7 +108,6 @@ const Sidebar = () => {
                       {menu.name}
                     </span>
                   )}
-                  {/* </a> */}
                 </Link>
               </Box>
             );

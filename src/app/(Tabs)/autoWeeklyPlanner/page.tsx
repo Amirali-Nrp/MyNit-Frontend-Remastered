@@ -157,7 +157,7 @@ export default function page() {
           )}
         </Box>
       ) : (
-        <Box className="flex h-5/6 flex-col gap-5 p-12">
+        <Box className="flex h-[100%] flex-col gap-5 p-12">
           <CourseSelection
             tab={tab}
             setTab={setTab}

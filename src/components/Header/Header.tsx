@@ -1,102 +1,107 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
+import { logOutAction } from "@/core/actions";
 import useGetUnits from "@/core/services/api/use-getunits";
 import { useSidebarStorage } from "@/storage/storage";
-import MenuIcon from "@mui/icons-material/Menu";
-import { Avatar, Tooltip } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import showToast from "@/utils/showToast";
+import { AppBar, Box, IconButton, Stack, Toolbar } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
-import UniversityLogo from "../icons/UniversityLogo";
+import { DateTimePill } from "./DateTimePill"; // your existing file
+import HideOnScroll from "./HideOnScroll";
+import Logo from "./Logo"; // your existing file
+import NavLinks, { NavItem } from "./NavLinks";
+import UserArea from "./UserArea";
 
 export default function Header() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const theme = useTheme();
 
   const { toggleCollapse, setToggleCollapse } = useSidebarStorage();
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // Fetch student (via your hook)
+  const { data: studentInfo, isLoading, isError } = useGetUnits();
+  const name = isError ? "Unknown User" : (studentInfo?.name ?? null);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const navItems: NavItem[] = [{ label: "داشبورد", href: "/dashboard" }];
 
-  const handleSidebarToggle = () => {
-    setToggleCollapse(!toggleCollapse);
-  };
+  const handleSidebarToggle = () => setToggleCollapse(!toggleCollapse);
 
-  const { data: studentInfo } = useGetUnits();
+  const handleLogout = async () => {
+    const res = await logOutAction();
+    if (res) {
+      showToast("با موفقیت خارج شدید.", "success", 3000);
+      router.push("/login");
+    } else {
+      showToast("خطا در خروج از حساب کاربری.", "error", 3000);
+    }
+  };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar
-        position="fixed"
-        sx={{
-          backgroundColor: "background.default",
-          borderTop: "4px solid #002145",
-          paddingY: 1,
-        }}
-      >
-        <Toolbar>
-          <Box className="lg:hidden">
+    <>
+      <HideOnScroll>
+        <AppBar
+          elevation={0}
+          sx={(t) => ({
+            top: 12,
+            left: 0,
+            right: 0,
+            mx: "auto",
+            width: { xs: "calc(100% - 1.5rem)", sm: "min(1080px, 92%)" },
+            borderRadius: 999,
+            backdropFilter: "blur(10px)",
+            border: `1px solid ${t.palette.divider}`,
+            backgroundColor:
+              t.palette.mode === "light"
+                ? "rgba(255,255,255,0.7)"
+                : "rgba(17,25,40,0.6)",
+          })}
+        >
+          <Toolbar sx={{ minHeight: 64, px: { xs: 1, sm: 2 }, gap: 1 }}>
+            {/* Mobile sidebar toggle */}
             <IconButton
-              size="large"
-              edge="start"
-              // color="success"
-              aria-label="menu"
-              sx={{ mr: 2 }}
               onClick={handleSidebarToggle}
+              sx={{ display: { xs: "inline-flex", md: "none" }, ml: 1 }}
+              aria-label="Open menu"
             >
-              <MenuIcon />
+              <Box
+                component="img"
+                src="assets/menu.svg"
+                alt="Menu Icon"
+                sx={{ width: 38, height: 38 }}
+              />
             </IconButton>
-          </Box>
-          <Box className="flex flex-grow flex-row items-center gap-2">
-            <UniversityLogo />
-            <Typography variant="h6">دانشگاه نوشیروانی بابل</Typography>
-          </Box>
-          {
-            <div>
-              <Tooltip title="تنظیمات کاربر">
-                <IconButton onClick={handleMenu} sx={{ p: 0, gap: 2 }}>
-                  <Typography
-                    className="hidden sm:flex"
-                    sx={{ fontFamily: "Vazirmatn" }}
-                  >
-                    {studentInfo?.name}
-                  </Typography>
-                  <Avatar alt="" src="" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          }
-        </Toolbar>
-      </AppBar>
-    </Box>
+
+            <Logo />
+
+            {/* Top-level nav (desktop) */}
+            <NavLinks items={navItems} pathname={pathname} color="#0f172a" />
+
+            <Box sx={{ flexGrow: 1 }} />
+
+            {/* Date/Time pill */}
+            <Box sx={{ display: { xs: "none", sm: "flex" } }}>
+              <DateTimePill />
+            </Box>
+
+            {/* User area */}
+            <UserArea
+              name={name}
+              isLoading={isLoading}
+              onLogout={handleLogout}
+              color="#0f172a"
+            />
+          </Toolbar>
+        </AppBar>
+      </HideOnScroll>
+
+      {/* Offset so content doesn't hide under the floating bar */}
+      <Toolbar sx={{ mb: { xs: 6, md: 8 } }} />
+    </>
   );
 }

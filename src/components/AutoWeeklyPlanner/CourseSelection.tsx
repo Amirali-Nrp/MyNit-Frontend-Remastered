@@ -53,7 +53,6 @@ export default function CourseSelection({
 
   return (
     <>
-      {" "}
       <Tabs
         value={tab}
         onChange={(_, v) => setTab(v)}
