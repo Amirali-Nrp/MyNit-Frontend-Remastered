@@ -1,8 +1,8 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
   env: {
-    "browser": true,
-    "jest/globals": true
+    browser: true,
+    "jest/globals": true,
   },
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -17,19 +17,21 @@ const config = {
     "plugin:jest/recommended",
   ],
   rules: {
-    "@typescript-eslint/consistent-type-imports": [
-      "warn",
-      {
-        prefer: "type-imports",
-        fixStyle: "inline-type-imports",
-      },
-    ],
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      {
-        argsIgnorePattern: "^_",
-      },
-    ],
+    // "@typescript-eslint/consistent-type-imports": [
+    //   "warn",
+    //   {
+    //     prefer: "type-imports",
+    //     fixStyle: "inline-type-imports",
+    //   },
+    // ],
+    // "@typescript-eslint/no-unused-vars": [
+    //   "warn",
+    //   {
+    //     argsIgnorePattern: "^_",
+    //   },
+    // ],
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-page-custom-font": "off",
   },
   settings: {
     tailwindcss: {

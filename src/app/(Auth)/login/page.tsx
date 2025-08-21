@@ -2,7 +2,7 @@
 
 import { loginObject, TloginObject } from "@/validation/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, CircularProgress, Link, Typography } from "@mui/material";
+import { Box, Link, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 import "@/app/button.css";
