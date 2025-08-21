@@ -17,21 +17,19 @@ const config = {
     "plugin:jest/recommended",
   ],
   rules: {
-    // "@typescript-eslint/consistent-type-imports": [
-    //   "warn",
-    //   {
-    //     prefer: "type-imports",
-    //     fixStyle: "inline-type-imports",
-    //   },
-    // ],
-    // "@typescript-eslint/no-unused-vars": [
-    //   "warn",
-    //   {
-    //     argsIgnorePattern: "^_",
-    //   },
-    // ],
-    "react/no-unescaped-entities": "off",
-    "@next/next/no-page-custom-font": "off",
+    "@typescript-eslint/consistent-type-imports": [
+      "warn",
+      {
+        prefer: "type-imports",
+        fixStyle: "inline-type-imports",
+      },
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        argsIgnorePattern: "^_",
+      },
+    ],
   },
   settings: {
     tailwindcss: {
