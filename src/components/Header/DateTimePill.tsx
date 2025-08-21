@@ -52,6 +52,8 @@ export function DateTimePill() {
             : "0 6px 20px rgba(0,0,0,0.5)",
         color: "#0f172a",
         textAlign: "right",
+        width: "150px",
+        justifyContent: "space-between",
       })}
     >
       {/* Put date first so it appears on the RIGHT in RTL */}

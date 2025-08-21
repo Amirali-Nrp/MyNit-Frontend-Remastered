@@ -7,13 +7,14 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Box overflow="auto">
+    <Box overflow="hidden">
       <Header />
-      <Box className="flex h-screen flex-row justify-start">
-        <Sidebar />
-        <Box className="mx-8 flex-1 bg-primary text-white lg:mx-32">
-          {children}
-        </Box>
+      <Sidebar />
+      <Box
+        component="main"
+        className="layout flex-1 bg-primary pb-16 text-white lg:mx-32"
+      >
+        {children}
       </Box>
     </Box>
   );

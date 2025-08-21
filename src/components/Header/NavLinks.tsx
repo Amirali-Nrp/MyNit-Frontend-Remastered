@@ -13,11 +13,7 @@ type Props = {
   color?: string; // brand color
 };
 
-export default function NavLinks({
-  items,
-  pathname,
-  color = "#0f172a",
-}: Props) {
+export default function NavLinks({ items, pathname }: Props) {
   return (
     <>
       {items.map((item) => {
@@ -38,10 +34,6 @@ export default function NavLinks({
               borderRadius: 999,
               fontWeight: 600,
               textTransform: "none",
-              color,
-              borderColor: active ? color : "transparent",
-              "&:hover": { borderColor: color },
-              display: { xs: "none", sm: "inline-flex" },
             }}
           >
             {item.label}

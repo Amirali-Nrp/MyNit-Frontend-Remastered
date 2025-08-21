@@ -7,7 +7,14 @@ import useGetUnits from "@/core/services/api/use-getunits";
 import { usePlanNumStorage, usePlansStorage } from "@/storage/storage";
 import { Eligible, plan } from "@/types";
 import showToast from "@/utils/showToast";
-import { Box, Button, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Pagination,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 import AutoPlannerHelp from "@/components/AutoWeeklyPlanner/AutoPlannerHelp";
 import CourseSelection from "@/components/AutoWeeklyPlanner/CourseSelection";
@@ -85,21 +92,25 @@ export default function page() {
     setIsLoadingPlans(false);
   };
 
-  const handleNextPlan = () => {
-    setPlanNum((prev) => (prev + 1) % plans.length);
-  };
-
-  const handlePrevPlan = () => {
-    setPlanNum((prev) => (prev - 1 + plans.length) % plans.length);
-  };
-
   const handleResetPlan = () => {
     setPlanNum(0);
     setPlans([]);
   };
 
   return (
-    <>
+    <Stack spacing={2}>
+      <Box>
+        <Typography
+          variant="h4"
+          fontWeight={700}
+          sx={{ fontSize: { xs: "1.25rem", sm: "1.5rem", md: "2rem" } }} // ← تیتر کوچکتر در موبایل
+        >
+          پیشنهاد برنامه هفتگی
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          مشاهده تمام برنامه های ممکن با یک کلیک
+        </Typography>
+      </Box>
       {plans.length !== 0 ? (
         <Box className="flex flex-col">
           <ScheduleTable
@@ -108,36 +119,21 @@ export default function page() {
             )}
           />
           <Box className="mt-4 flex gap-2">
+            <Box className="flex items-center gap-2">
+              <Pagination
+                count={plans.length}
+                page={planNum + 1}
+                onChange={(_, p) => setPlanNum(p - 1)}
+                color="primary"
+              />
+            </Box>
             <Button
               sx={{
-                bgcolor: "#0f172a",
+                bgcolor: "primary.dark",
                 "&:hover": {
-                  bgcolor: "#334155",
+                  bgcolor: "primary.main",
                 },
-              }}
-              variant="contained"
-              onClick={handlePrevPlan}
-            >
-              قبلی
-            </Button>
-            <Button
-              sx={{
-                bgcolor: "#0f172a",
-                "&:hover": {
-                  bgcolor: "#334155",
-                },
-              }}
-              variant="contained"
-              onClick={handleNextPlan}
-            >
-              بعدی
-            </Button>
-            <Button
-              sx={{
-                bgcolor: "#0f172a",
-                "&:hover": {
-                  bgcolor: "#334155",
-                },
+                borderRadius: 999,
               }}
               variant="contained"
               onClick={handleResetPlan}
@@ -157,7 +153,7 @@ export default function page() {
           )}
         </Box>
       ) : (
-        <Box className="flex h-[100%] flex-col gap-5 p-12">
+        <Box className="flex flex-col gap-5" sx={{ height: "75vh" }}>
           <CourseSelection
             tab={tab}
             setTab={setTab}
@@ -170,11 +166,12 @@ export default function page() {
           <Button
             variant="contained"
             sx={{
-              bgcolor: "#0f172a",
+              bgcolor: "primary.dark",
               "&:hover": {
-                bgcolor: "#334155",
+                bgcolor: "primary.main",
               },
             }}
+            fullWidth
             onClick={getPlans}
             disabled={isLoading}
           >
@@ -187,6 +184,6 @@ export default function page() {
         </Box>
       )}
       <AutoPlannerHelp />
-    </>
+    </Stack>
   );
 }

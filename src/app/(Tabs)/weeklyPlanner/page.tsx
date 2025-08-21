@@ -3,13 +3,29 @@
 import React, { useMemo, useState } from "react";
 
 import { DayKey, TIME_SLOTS, WEEK_DAYS } from "@/constants";
+import useChooseUnits from "@/core/services/api/use-chooseunits";
 import useGetUnits from "@/core/services/api/use-getunits";
 import { useWeeklyPlanStorage } from "@/storage/storage";
 import { DayTime, Eligible } from "@/types";
 import showToast from "@/utils/showToast";
-import { dayLabel, examRange, parseGroup, rangesOverlap } from "@/utils/utils";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import {
+  dayLabel,
+  examRange,
+  handleCapture,
+  handleGetExcel,
+  parseGroup,
+  rangesOverlap,
+} from "@/utils/utils";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 
+import ErrorState from "@/components/ErrorState";
+import LoadingScreen from "@/components/LoadingScreen";
 import CourseSelectionDialog from "@/components/WeeklyPlanner/CourseSelectionDialog";
 import ScheduleGrid from "@/components/WeeklyPlanner/ScheduleGrid";
 import SelectedCoursesList from "@/components/WeeklyPlanner/SelectedCoursesList";
@@ -28,6 +44,7 @@ export default function WeeklyCoursePlanner() {
     slot: number;
   } | null>(null);
   const [tab, setTab] = useState(0);
+  const [isChoosing, setIsChoosing] = useState(false);
 
   const byCategory = useMemo(() => {
     const specialty = courses?.filter((c) => c.collegeID === "12") ?? [];
@@ -140,29 +157,50 @@ export default function WeeklyCoursePlanner() {
     });
   };
 
-  if (isLoading) {
-    return (
-      <Box className="flex h-full items-center justify-center">
-        <CircularProgress sx={{ color: "#0f172a" }} />
-      </Box>
-    );
-  }
+  const handleSave = async () => {
+    // Save the selected courses
+    setIsChoosing(true);
+    const ids = Object.values(selected).map((data) => data.courseID);
+    const res = await useChooseUnits({ ids });
+    if (res.ok) {
+      showToast("دروس با موفقیت ثبت شدند.", "success", 3000);
+    } else {
+      showToast("خطا در ثبت دروس. لطفاً دوباره تلاش کنید.", "error", 3000);
+    }
+    handleGetExcel(Object.values(selected), "لیست-دروس");
+    handleCapture("schedule-grid", "برنامه-هفتگی");
+    setIsChoosing(false);
+  };
 
-  if (isError) {
-    return (
-      <Box p={4} textAlign="center">
-        <Typography color="error">خطا در بارگذاری داده‌ها</Typography>
-      </Box>
-    );
-  }
+  if (isLoading) return <LoadingScreen />;
+
+  if (isError) return <ErrorState message="خطا در بارگذاری اطلاعات دروس." />;
 
   return (
-    <Box dir="rtl" sx={{ width: "100%", fontFamily: "Vazirmatn" }}>
-      <ScheduleGrid
-        selected={selected}
-        removeCourse={removeCourse}
-        handleOpen={handleOpen}
-      />
+    <Stack
+      spacing={2}
+      dir="rtl"
+      sx={{ width: "100%", fontFamily: "Vazirmatn" }}
+    >
+      <Box>
+        <Typography
+          variant="h4"
+          fontWeight={700}
+          sx={{ fontSize: { xs: "1.25rem", sm: "1.5rem", md: "2rem" } }} // ← تیتر کوچکتر در موبایل
+        >
+          پیش ثبت نام
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          چینش برنامه هفتگی دلخواه برای ترم آینده
+        </Typography>
+      </Box>
+      <div id="schedule-grid">
+        <ScheduleGrid
+          selected={selected}
+          removeCourse={removeCourse}
+          handleOpen={handleOpen}
+        />
+      </div>
       <CourseSelectionDialog
         open={!!cellAnchor}
         onClose={handleClose}
@@ -177,7 +215,25 @@ export default function WeeklyCoursePlanner() {
       {Object.values(selected).length > 0 && (
         <SelectedExamsList selected={selected} removeCourse={removeCourse} />
       )}
+      <Button
+        variant="contained"
+        sx={{
+          bgcolor: "primary.dark",
+          "&:hover": {
+            bgcolor: "primary.main",
+          },
+        }}
+        fullWidth
+        onClick={handleSave}
+        disabled={isChoosing || Object.keys(selected).length === 0}
+      >
+        {isChoosing ? (
+          <CircularProgress sx={{ color: "#fff" }} size={24} />
+        ) : (
+          "ذخیره برنامه"
+        )}
+      </Button>
       <UsageHints />
-    </Box>
+    </Stack>
   );
 }

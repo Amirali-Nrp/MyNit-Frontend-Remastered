@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-export default function UsageHints() {
+export default function HelperNotes() {
   return (
     <Box mt={5} p={2} borderTop="1px solid" borderColor="primary.dark">
       <Typography fontWeight={700} mb={1} color="primary.dark">
@@ -8,11 +8,10 @@ export default function UsageHints() {
       </Typography>
       <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
         {[
-          "برای انتخاب درس، روی خانه‌ی خالی جدول در روز و ساعت مورد نظر کلیک کنید.",
-          "برای حذف یک درس، روی خانه‌ی پرشده کلیک کنید.",
-          "اگر زمان کلاس یا امتحان با درس دیگری تداخل داشته باشد، پیغام هشدار نمایش داده می‌شود.",
-          "در بخش «دروس انتخاب‌شده» می‌توانید کد درس را با کلیک کپی کنید.",
-          "در بخش «امتحانات انتخاب‌شده» می‌توانید با زدن علامت حذف، درس را از برنامه حذف کنید.",
+          "تگ tbody کپی شده ی خود را در ورودی وارد کنید.",
+          "جهت پیش نمایش و اعتبارسنجی ورودی، روی دکمه «تجزیه» کلیک کنید.",
+          "برای پاک کردن ورودی، روی دکمه «پاک کردن» کلیک کنید.",
+          "برای ارسال داده‌ها و بروزرسانی اطلاعات خود، روی دکمه «ارسال» کلیک کنید.",
         ].map((hint, idx) => (
           <Box
             key={idx}

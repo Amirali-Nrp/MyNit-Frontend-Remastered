@@ -36,16 +36,13 @@ export default function ScheduleGrid({
         background: "linear-gradient(180deg,#ffffff, #fbfdff)",
       }}
     >
-      <Box sx={{ bgcolor: "#0f172a", p: 2 }}>
+      <Box sx={{ bgcolor: "primary.dark", p: 2 }}>
         <Typography fontWeight={700} color="#fff">
           روز / ساعت
         </Typography>
       </Box>
       {TIME_SLOTS.map((s, cIdx) => (
-        <Box
-          key={s.id}
-          sx={{ p: 2, bgcolor: cIdx % 2 === 0 ? "#0f172a" : "#111827" }}
-        >
+        <Box key={s.id} sx={{ p: 2, bgcolor: "primary.dark" }}>
           <Typography
             variant="body2"
             textAlign="center"
@@ -62,7 +59,7 @@ export default function ScheduleGrid({
           <Box
             sx={{ p: 2, bgcolor: "#ffffff", borderTop: "1px solid #e5e7eb" }}
           >
-            <Typography fontWeight={700} color="#0f172a">
+            <Typography fontWeight={700} color="primary.dark">
               {d.label}
             </Typography>
           </Box>

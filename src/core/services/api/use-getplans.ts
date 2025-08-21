@@ -15,7 +15,6 @@ export default async function getPlans({
     );
     return { ok: true, data: response.data };
   } catch (error) {
-    console.error("Error fetching plans:", error);
     return { ok: false, data: null };
   }
 }

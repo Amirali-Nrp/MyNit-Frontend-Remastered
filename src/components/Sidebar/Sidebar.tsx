@@ -2,41 +2,20 @@
 
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
-// import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
 
-import { menuItems } from "@/constants/menu.items";
+import { adminMenuItems, menuItems } from "@/constants/menu.items";
 import { useSidebarStorage } from "@/storage/storage";
 import { MenuItem } from "@/types";
 import { Box } from "@mui/material";
+import { useSession } from "next-auth/react";
 
 import { cn } from "@/lib/utils";
 
 import GlassContainer from "../Glass/GlassContainer";
-import { CollapsIcon, LogoIcon, LogoutIcon } from "../icons";
-
-// import classNames from "classnames";
-
-// import {
-//   ArticleIcon,
-//   CollapsIcon,
-//   HomeIcon,
-//   LogoIcon,
-//   LogoutIcon,
-//   UsersIcon,
-//   VideosIcon,
-// } from "./icons";
-
-// const menuItems = [
-//   { id: 1, label: "Home", icon: HomeIcon, link: "/" },
-//   { id: 2, label: "Manage Posts", icon: ArticleIcon, link: "/posts" },
-//   { id: 3, label: "Manage Users", icon: UsersIcon, link: "/users" },
-//   { id: 4, label: "Manage Tutorials", icon: VideosIcon, link: "/tutorials" },
-// ];
 
 const Sidebar = () => {
-  // const [toggleCollapse, setToggleCollapse] = useState(true);
-  // const [isCollapsible, setIsCollapsible] = useState(false);
+  const { data: session } = useSession();
 
   const { toggleCollapse, setToggleCollapse } = useSidebarStorage();
 
@@ -55,10 +34,6 @@ const Sidebar = () => {
     }
   );
 
-  const collapseIconClasses = cn("p-4 rounded bg-[#749EC0] absolute left-0", {
-    "rotate-180": !toggleCollapse,
-  });
-
   const getNavItemClasses = (menu: {
     id: number;
     name: string;
@@ -70,11 +45,6 @@ const Sidebar = () => {
         ["bg-[#71b0e3]"]: activeMenu?.id === menu.id,
       }
     );
-  };
-
-  const onMouseOver = () => {
-    console.log("mouse");
-    // setIsCollapsible(!isCollapsible);
   };
 
   const handleSidebarToggle = () => {
@@ -112,21 +82,30 @@ const Sidebar = () => {
               </Box>
             );
           })}
+          {session?.user.isAdmin &&
+            adminMenuItems.map(({ icon: Icon, ...menu }) => {
+              const classes = getNavItemClasses(menu);
+              return (
+                <Box className={classes} key={menu.id}>
+                  <Link
+                    href={menu.href}
+                    className="flex h-full w-full items-center px-3 py-4"
+                  >
+                    <Box sx={{ width: "2.5rem" }}>
+                      <Icon size={20} />
+                    </Box>
+                    {!toggleCollapse && (
+                      <span className="text-md text-text-light font-medium">
+                        {menu.name}
+                      </span>
+                    )}
+                  </Link>
+                </Box>
+              );
+            })}
         </Box>
       </GlassContainer>
     </Box>
-
-    // <Box className={`${getNavItemClasses({})} px-3 py-4`}>
-    //   <Box sx={{ width: "2.5rem" }}>
-    //     <LogoutIcon />
-    //   </Box>
-    //   {!toggleCollapse && (
-    //     <span className={cn("text-md text-text-light font-medium")}>
-    //       Logout
-    //     </span>
-    //   )}
-    // </Box>
-    // </Box>
   );
 };
 

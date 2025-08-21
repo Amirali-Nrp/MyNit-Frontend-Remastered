@@ -74,7 +74,10 @@ export default function Page() {
       <Typography
         sx={{ textAlign: "left", fontSize: "16px", fontWeight: 500, m: "5px" }}
       >
-        حساب کاربری ندارید؟ <Link href="/register">ثبت نام کنید</Link>
+        حساب کاربری ندارید؟{" "}
+        <Link href="/register" color="primary.light">
+          ثبت نام کنید
+        </Link>
       </Typography>
 
       <Button48

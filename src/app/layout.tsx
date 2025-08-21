@@ -4,6 +4,8 @@ import { SessionProvider } from "next-auth/react";
 
 import "./globals.css";
 
+import { theme } from "@/themes/theme";
+
 import ToasterContainer from "@/components/ToasterContainer/ToasterContainer";
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -27,7 +29,7 @@ export default function RootLayout({
       >
         <SessionProvider session={session}>
           <ReactQueryProvider>
-            <CustomThemeProvider>
+            <CustomThemeProvider theme={theme}>
               <ToasterContainer />
               {children}
             </CustomThemeProvider>

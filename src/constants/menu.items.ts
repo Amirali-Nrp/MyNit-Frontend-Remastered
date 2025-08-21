@@ -27,13 +27,13 @@ export const menuItems: MenuItem[] = [
   {
     id: 3,
     name: "چارت پیشنهادی دانشکده",
-    href: "/SuggestedUniversityChart",
+    href: "/suggestedUniversityChart",
     icon: FaUniversity,
   },
   {
     id: 4,
     name: "چارت پیشنهادی هوشمند",
-    href: "/SuggestedSystemChart",
+    href: "/suggestedSystemChart",
     icon: LuBrainCircuit,
   },
   {
@@ -52,7 +52,7 @@ export const menuItems: MenuItem[] = [
   {
     id: 7,
     name: "افزودن اطلاعات",
-    href: "/AddCourses",
+    href: "/addCourses",
     icon: TiDocumentAdd,
   },
   {
@@ -61,10 +61,19 @@ export const menuItems: MenuItem[] = [
     href: "https://nitacademy.ir/",
     icon: PiFilmReel,
   },
-  //   {
-  //     id: 9,
-  //     name: "رزرو غذا",
-  //     href: "https://food.nit.ac.ir",
-  //     icon: GiMeal,
-  //   },
+  // {
+  //   id: 9,
+  //   name: "رزرو غذا",
+  //   href: "https://food.nit.ac.ir",
+  //   icon: GiMeal,
+  // },
+];
+
+export const adminMenuItems: MenuItem[] = [
+  {
+    id: 1,
+    name: "مدیریت دانشجویان",
+    href: "/admin",
+    icon: MdAdminPanelSettings,
+  },
 ];

@@ -12,22 +12,12 @@ type Props = {
   color?: string; // brand color
 };
 
-export default function UserArea({
-  name,
-  isLoading,
-  onLogout,
-  color = "#0f172a",
-}: Props) {
+export default function UserArea({ name, isLoading, onLogout }: Props) {
   return (
     <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
       {isLoading ? (
         <Stack direction="row" alignItems="center" sx={{ pl: 1 }}>
-          <CircularProgress
-            sx={{ color: "#0f172a" }}
-            size={20}
-            thickness={5}
-            aria-label="Loading user"
-          />
+          <CircularProgress size={20} thickness={5} aria-label="Loading user" />
         </Stack>
       ) : (
         <>
@@ -35,7 +25,7 @@ export default function UserArea({
             sx={{ display: { xs: "none", md: "flex" } }}
             variant="body2"
             fontWeight={700}
-            color={color}
+            color="primary" // Use theme color or custom color
           >
             {name ?? "Unknown User"}
           </Typography>
@@ -45,11 +35,10 @@ export default function UserArea({
               sx={{
                 borderRadius: "50%",
                 border: "1px solid",
-                borderColor: color,
                 p: 1,
-                color,
               }}
               aria-label="Logout"
+              color="primary" // Use theme color or custom color
             >
               <LogoutRoundedIcon fontSize="medium" />
             </IconButton>

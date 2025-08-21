@@ -134,7 +134,10 @@ export default function Register() {
       />
 
       <Typography sx={{ fontSize: "16px", padding: "5px" }}>
-        حساب کاربری دارید؟ <Link href="/login">وارد شوید</Link>
+        حساب کاربری دارید؟{" "}
+        <Link href="/login" color="primary.light">
+          وارد شوید
+        </Link>
       </Typography>
 
       <Button48

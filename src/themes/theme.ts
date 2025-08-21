@@ -1,42 +1,31 @@
 "use client";
 
-import { createContext, useMemo, useState } from "react";
-
 import { createTheme } from "@mui/material/styles";
 
-// export function ToggleColorMode() {
-//   const [mode, setMode] = useState<"light" | "dark">("light");
-//   const colorMode = useMemo(
-//     () => ({
-//       toggleColorMode: () => {
-//         setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
-//       },
-//     }),
-//     []
-//   );
-//   return { mode, colorMode };
-// }
-
-// const { mode } = ToggleColorMode();
-
-// export const theme = useMemo(() => {
-//   createTheme({
-//     palette: {
-//       mode,
-//       primary: {
-//         main: "#0099ff",
-//         light: "#33bfff",
-//         dark: "#0066cc",
-//       },
-//       // background: {
-//       //   default: "#fff",
-//       // },
-//     },
-//     typography: {
-//       fontFamily: "Vazirmatn",
-//     },
-//     direction: "rtl",
-//   });
-// }, [mode]);
-
-export const ColorModeContext = createContext({ toggleColorMode: () => {} });
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#002670",
+      light: "#668CC4", // A lighter shade of the main color
+      dark: "#0D1D3E", // A darker shade of the main color
+    },
+  },
+  typography: {
+    fontFamily: "Vazirmatn",
+    h3: {
+      fontSize: "1.2rem",
+      "@media (min-width:640px)": {
+        fontSize: "1.25rem",
+      },
+      fontWeight: 550,
+    },
+    h6: {
+      fontSize: "1rem",
+      "@media (min-width:1024px)": {
+        fontSize: "1.25rem",
+      },
+      fontWeight: 550,
+    },
+  },
+  direction: "rtl",
+});

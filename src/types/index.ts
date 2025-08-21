@@ -90,3 +90,26 @@ export interface plan {
   courses: Eligible[];
   totalUnits: string;
 }
+
+export interface TStudentCard {
+  id: number;
+  name: string;
+  entry: number;
+  college: string;
+  period: string;
+  valid: boolean;
+}
+
+export interface TSudentInfo {
+  id: number;
+  name: string;
+  entry: number;
+  college: string;
+  period: string;
+  valid: boolean;
+  passed_units: number;
+  terms: Term[];
+}
+
+export type Row = Record<string, any>;
+export type DataInput = Row[] | Record<string, Row>;

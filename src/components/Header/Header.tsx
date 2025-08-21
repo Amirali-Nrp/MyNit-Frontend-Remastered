@@ -80,7 +80,7 @@ export default function Header() {
             <Logo />
 
             {/* Top-level nav (desktop) */}
-            <NavLinks items={navItems} pathname={pathname} color="#0f172a" />
+            <NavLinks items={navItems} pathname={pathname} />
 
             <Box sx={{ flexGrow: 1 }} />
 
@@ -94,7 +94,6 @@ export default function Header() {
               name={name}
               isLoading={isLoading}
               onLogout={handleLogout}
-              color="#0f172a"
             />
           </Toolbar>
         </AppBar>

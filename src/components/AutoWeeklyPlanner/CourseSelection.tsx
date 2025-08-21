@@ -58,16 +58,6 @@ export default function CourseSelection({
         onChange={(_, v) => setTab(v)}
         aria-label="course categories"
         scrollButtons
-        sx={{
-          borderBottom: 1,
-          borderColor: "divider",
-          "& .Mui-selected": {
-            color: "#0f172a !important",
-          },
-          "& .MuiTabs-indicator": {
-            backgroundColor: "#0f172a",
-          },
-        }}
       >
         <Tab label="تخصصی" />
         <Tab label="علوم پایه" />
@@ -76,7 +66,7 @@ export default function CourseSelection({
       </Tabs>
       {isLoading ? (
         <Box className="flex h-full items-center justify-center">
-          <CircularProgress sx={{ color: "#0f172a" }} />
+          <CircularProgress />
         </Box>
       ) : (
         <DataGrid
@@ -107,7 +97,7 @@ export default function CourseSelection({
           }}
           sx={{
             "& .MuiDataGrid-columnHeaders": {
-              bgcolor: "#0f172a",
+              bgcolor: "primary.dark",
               color: "#fff",
               fontWeight: 700,
             },
@@ -117,7 +107,7 @@ export default function CourseSelection({
               backgroundColor: "#e0e7ef",
             },
             "& .Mui-selected": {
-              backgroundColor: "#c7d2fe !important",
+              backgroundColor: "#dbeafe !important",
             },
             "& .MuiDataGrid-columnHeader, & .MuiDataGrid-columnHeader .MuiSvgIcon-root":
               {
@@ -125,10 +115,10 @@ export default function CourseSelection({
               },
             // Checkbox color customization
             "& .MuiCheckbox-root.Mui-checked": {
-              color: "#0f172a !important",
+              color: "#primary.dark !important",
             },
             "& .MuiCheckbox-root.MuiCheckbox-indeterminate": {
-              color: "#0f172a !important",
+              color: "primary.dark !important",
             },
             bgcolor: "#fff",
           }}
