@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./public/assets/nit-logo-white.svg" alt="Babol Noshirvani University of Technology" width="150" />
+  <img src="./public/assets/nit-logo-white-vector.svg" alt="Babol Noshirvani University of Technology" width="150" />
 
   # MyNIT — Intelligent Course Registration Frontend
 
